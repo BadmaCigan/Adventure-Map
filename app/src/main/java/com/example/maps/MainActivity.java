@@ -16,9 +16,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     GoogleMap googleMap;
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Profil_fragment profil_fragment;
     Search_fragment search_fragment;
     New_Marker_fragment new_marker_fragment;
+    HashMap<Float,EventMarker> mapOfMarkers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         profil_fragment = new Profil_fragment();
         search_fragment = new Search_fragment();
         new_marker_fragment = new New_Marker_fragment();
-
+        mapOfMarkers = new HashMap<>();
         createMapView();
 
 
@@ -139,12 +143,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onMapReady(@NonNull GoogleMap googleMap) {
             MainActivity.this.googleMap=googleMap;
+            float a= 5f;
+            for(int i = 0;i<1000;i++){
+                EventMarker marker = new EventMarker(47.222531 + Math.random()/a*(Math.random()>0.5?1:-1),39.718705 + Math.random()/a*(Math.random()>0.5?1:-1),"Метка №" + i,i%6);
+                marker.addMarkertoMap(googleMap,mapOfMarkers);
 
-            MarkerOptions mark = new MarkerOptions().position(new LatLng(47.222531,39.718705)).rotation(90f).draggable(true).title("Туса");
+            }
+
+            MarkerOptions mark = new MarkerOptions().position(new LatLng(47.222531,39.718705)).rotation(15f).draggable(true).title("Туса")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).zIndex(45f);
 
             googleMap.addMarker(mark);
 
+
             googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+
             CameraPosition googlePlex = CameraPosition.builder()
                     .target(new LatLng(47.222531,39.718705))
                     .zoom(18)
