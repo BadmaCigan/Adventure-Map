@@ -47,7 +47,8 @@ public class Profil_fragment extends Fragment implements View.OnClickListener {
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
                 Fragment fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.hide(fragment);
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                fragmentTransaction.replace(R.id.place_holder_fragment,new Fragment());
                 setAllVissible();
                 fragmentTransaction.commit();
 

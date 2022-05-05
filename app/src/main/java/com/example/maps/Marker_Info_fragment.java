@@ -8,23 +8,44 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class Search_fragment extends Fragment implements View.OnClickListener {
+import java.util.Date;
+
+public class Marker_Info_fragment extends Fragment implements View.OnClickListener{
+    TextView title_of_event_tv;
+    TextView event_description_tv;
+    TextView event_date_tv;
+    TextView event_address_tv;
+    TextView event_category_tv;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // менеджер компоновки, который позволяет получать доступ к layout с наших ресурсов
-        View view = inflater.inflate(R.layout.search_fragment, container, false);
+        View view = inflater.inflate(R.layout.marker_info_fragment, container, false);
+
+        title_of_event_tv = view.findViewById(R.id.title_of_event_text_view);
+        event_description_tv = view.findViewById(R.id.event_description_tv);
+        event_date_tv = view.findViewById(R.id.event_date_text_view);
+        event_address_tv = view.findViewById(R.id.event_address_text_view);
+        event_category_tv = view.findViewById(R.id.event_category_text_view);
+
         return view;
     }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button cancel_button = (Button) getView().findViewById(R.id.cancel_search_button);
+
+        Button cancel_button = (Button) getView().findViewById(R.id.cancel_marker_info_button);
         cancel_button.setOnClickListener(this);
+
 
 
 
@@ -37,13 +58,26 @@ public class Search_fragment extends Fragment implements View.OnClickListener {
 
     }
 
+    public void setMarkerInfo(EventMarker eventMarker){
+
+
+
+
+        title_of_event_tv.setText(eventMarker.title);
+        event_description_tv.setText(eventMarker.description);
+        event_date_tv.setText(new Date(eventMarker.date).toString());
+        event_address_tv.setText(eventMarker.address);
+        event_category_tv.setText(eventMarker.category == null?"Yes":"NO");
+
+    }
+
     @Override
     public void onClick(View view) {
 
         switch (view.getId()){
             //при необходимости очистить поля
 
-            case R.id.cancel_search_button:
+            case R.id.cancel_marker_info_button:
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
                 Fragment fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -60,5 +94,4 @@ public class Search_fragment extends Fragment implements View.OnClickListener {
         }
 
     }
-
 }

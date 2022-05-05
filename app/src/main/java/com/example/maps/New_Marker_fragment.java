@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.AnimatorRes;
+
 public class New_Marker_fragment extends Fragment implements View.OnClickListener {
 
     @Override
@@ -47,7 +49,8 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
                 Fragment fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.hide(fragment);
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                fragmentTransaction.replace(R.id.place_holder_fragment,new Fragment());
                 setAllVissible();
                 fragmentTransaction.commit();
 

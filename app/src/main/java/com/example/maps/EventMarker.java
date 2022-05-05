@@ -1,12 +1,22 @@
 package com.example.maps;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class EventMarker {
     public static final int CATEGORY_OTHER = 0;
@@ -16,23 +26,32 @@ public class EventMarker {
     public static final int CATEGORY_TALKING = 4;
 
 
-    String category;
-    LatLng position;
-    String description;
-    String title;
-    float hue;
-    float id;
+    public String category;
+    public LatLng position;
+    public String description;
+    public String title;
+    public String address;
+    public float hue;
+    public float id;
+    public long date;
 
-    public EventMarker(double latitude, double longitude, String title, int category){
-        this(13,latitude,longitude,title,null,12l,category);
+
+    public EventMarker(Context context, int id,double latitude, double longitude, String title, int category){
+        this(context, id,latitude,longitude,title,"Событие тест - "+ title+" по координатам : "
+                + latitude + "  " + longitude,new Date().getTime(),category);
+
+
 
     }
 
-    public EventMarker(int id, double latitude, double longitude, String title, String description, long time,int category ){
+    public EventMarker(Context context, int id, double latitude, double longitude, String title, String description, long date, int category ){
         this.position = new LatLng(latitude, longitude);
         this.description = description;
         this.title = title;
         this.id = (float) id;
+        this.date = date;
+        this.address = " "+ latitude + " " + longitude;
+
 
 
 
@@ -81,9 +100,15 @@ public class EventMarker {
 
     public void addMarkertoMap(GoogleMap googleMap, HashMap<Float,EventMarker> hashMap){
         googleMap.addMarker(this.toMarkerOptions());
+
+
+
+
+
         hashMap.put(this.id,this);
 
     }
+
 
 
 

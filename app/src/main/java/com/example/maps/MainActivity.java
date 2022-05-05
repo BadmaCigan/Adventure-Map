@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -19,19 +22,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    GoogleMap googleMap;
-    Button profil_button;
-    Button search_button;
-    Button new_marker_button;
-    Profil_fragment profil_fragment;
-    Search_fragment search_fragment;
-    New_Marker_fragment new_marker_fragment;
-    HashMap<Float,EventMarker> mapOfMarkers;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,GoogleMap.OnMarkerClickListener  {
+    public GoogleMap googleMap;
+    public Button profil_button;
+    public Button search_button;
+    public Button new_marker_button;
+    public Profil_fragment profil_fragment;
+    public Search_fragment search_fragment;
+    public New_Marker_fragment new_marker_fragment;
+    public Marker_Info_fragment marker_info_fragment;
+    public static HashMap<Float,EventMarker> mapOfMarkers;
+    public Animation animation;
+    public Fragment fragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +54,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         profil_fragment = new Profil_fragment();
         search_fragment = new Search_fragment();
         new_marker_fragment = new New_Marker_fragment();
+        marker_info_fragment = new Marker_Info_fragment();
         mapOfMarkers = new HashMap<>();
+        //animation = AnimationUtils.loadAnimation(this,R.anim.alfa_translate);
+        fragment = new Fragment();
         createMapView();
+
 
 
 
@@ -65,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         Fragment place_holder_fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
 
         switch (view.getId()){
@@ -77,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTransaction.show(search_fragment);
 
                 setAllInvissible();
+
+
 
 
 
@@ -97,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.new_marker_button:
+
 
                 fragmentTransaction.replace(R.id.place_holder_fragment, new_marker_fragment);
 
@@ -138,19 +154,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        this.openMarkerInfo(this.mapOfMarkers.get(marker.getZIndex()));
+        return false;
+    }
+
     class MyMapListener implements OnMapReadyCallback {
 
         @Override
         public void onMapReady(@NonNull GoogleMap googleMap) {
             MainActivity.this.googleMap=googleMap;
-            float a= 5f;
-            for(int i = 0;i<1000;i++){
-                EventMarker marker = new EventMarker(47.222531 + Math.random()/a*(Math.random()>0.5?1:-1),39.718705 + Math.random()/a*(Math.random()>0.5?1:-1),"Метка №" + i,i%6);
+            float a= 300f;
+            for(int i = 0;i<50;i++){
+                EventMarker marker = new EventMarker(MainActivity.this, i, 55.705199 + Math.random()/a*(Math.random()>0.5?1:-1),37.820906 + Math.random()/a*(Math.random()>0.5?1:-1.5),"Метка №" + i,i%6);
                 marker.addMarkertoMap(googleMap,mapOfMarkers);
 
             }
 
-            MarkerOptions mark = new MarkerOptions().position(new LatLng(47.222531,39.718705)).rotation(15f).draggable(true).title("Туса")
+            MarkerOptions mark = new MarkerOptions().position(new LatLng(55.705199, 37.820906)).rotation(15f).draggable(true).title("Туса")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).zIndex(45f);
 
             googleMap.addMarker(mark);
@@ -159,15 +181,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
             CameraPosition googlePlex = CameraPosition.builder()
-                    .target(new LatLng(47.222531,39.718705))
+                    .target(new LatLng(55.705199, 37.820906))
                     .zoom(18)
                     .bearing(0)
                     .tilt(45)
                     .build();
 
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(googlePlex));
+
+            googleMap.setOnMarkerClickListener(MainActivity.this);
         }
 
 
+    }
+
+    public void openMarkerInfo(EventMarker eventMarker){
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        Fragment place_holder_fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
+        fragmentTransaction.replace(R.id.place_holder_fragment,this.marker_info_fragment);
+        fragmentTransaction.commit();
+        setAllInvissible();
+        marker_info_fragment.setMarkerInfo(eventMarker);
+        Toast.makeText(this, eventMarker.title, Toast.LENGTH_SHORT).show();
+    }
+
+    public static HashMap<Float,EventMarker> getMapOfMarkers(){
+        return new MainActivity().mapOfMarkers;
     }
 }
