@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         new_marker_fragment = new New_Marker_fragment();
         marker_info_fragment = new Marker_Info_fragment();
         mapOfMarkers = new HashMap<>();
-        //animation = AnimationUtils.loadAnimation(this,R.anim.alfa_translate);
         fragment = new Fragment();
         createMapView();
 
@@ -175,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MarkerOptions mark = new MarkerOptions().position(new LatLng(55.705199, 37.820906)).rotation(15f).draggable(true).title("Туса")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).zIndex(45f);
 
-            googleMap.addMarker(mark);
+             //googleMap.addMarker(mark);
 
 
             googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
@@ -204,7 +203,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction.commit();
         setAllInvissible();
         marker_info_fragment.setMarkerInfo(eventMarker);
-        Toast.makeText(this, eventMarker.title, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, eventMarker.category, Toast.LENGTH_SHORT).show();
+
     }
 
     public static HashMap<Float,EventMarker> getMapOfMarkers(){

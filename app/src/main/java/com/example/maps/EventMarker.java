@@ -25,6 +25,7 @@ public class EventMarker {
     public static final int CATEGORY_FUN = 3;
     public static final int CATEGORY_TALKING = 4;
 
+    public static final String[] CATEGORIES = { "Другое", "Спорт","Музыка","Развлечение","Разговоры"};
 
     public String category;
     public LatLng position;
@@ -34,6 +35,7 @@ public class EventMarker {
     public float hue;
     public float id;
     public long date;
+
 
 
     public EventMarker(Context context, int id,double latitude, double longitude, String title, int category){
@@ -57,32 +59,32 @@ public class EventMarker {
 
         switch (category){
             case CATEGORY_OTHER:
-                this.category = "Другое";
+                this.category = CATEGORIES[category];
                 this.hue = BitmapDescriptorFactory.HUE_MAGENTA;
                 break;
 
             case CATEGORY_SPORT:
-                this.category = "Спорт";
+                this.category = CATEGORIES[category];
                 this.hue = BitmapDescriptorFactory.HUE_AZURE;
                 break;
 
             case CATEGORY_MUSIC:
-                this.category = "Музка";
+                this.category = CATEGORIES[category];
                 this.hue = BitmapDescriptorFactory.HUE_ROSE;
                 break;
 
             case CATEGORY_FUN:
-                this.category = "Веселье";
+                this.category = CATEGORIES[category];
                 this.hue = BitmapDescriptorFactory.HUE_YELLOW;
                 break;
 
             case CATEGORY_TALKING:
-                this.category = "Разговоры";
+                this.category = CATEGORIES[category];
                 this.hue = BitmapDescriptorFactory.HUE_VIOLET;
                 break;
 
             default:
-                this.category = "Не определенно";
+                this.category = CATEGORIES[0];
                 this.hue = BitmapDescriptorFactory.HUE_RED;
         }
 

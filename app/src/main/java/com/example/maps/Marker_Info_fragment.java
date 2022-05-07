@@ -19,7 +19,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
     TextView event_date_tv;
     TextView event_address_tv;
     TextView event_category_tv;
-
+    com.google.android.material.textfield.TextInputEditText asd;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,11 +28,12 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
         // менеджер компоновки, который позволяет получать доступ к layout с наших ресурсов
         View view = inflater.inflate(R.layout.marker_info_fragment, container, false);
 
-        title_of_event_tv = view.findViewById(R.id.title_of_event_text_view);
-        event_description_tv = view.findViewById(R.id.event_description_tv);
-        event_date_tv = view.findViewById(R.id.event_date_text_view);
-        event_address_tv = view.findViewById(R.id.event_address_text_view);
-        event_category_tv = view.findViewById(R.id.event_category_text_view);
+
+
+
+
+
+
 
         return view;
     }
@@ -43,6 +44,12 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
+        title_of_event_tv = (TextView) getView().findViewById(R.id.title_of_event_text_view);
+        event_description_tv = (TextView) getView().findViewById(R.id.event_description_tv);
+        event_date_tv = (TextView) getView().findViewById(R.id.event_date_text_view);
+        event_address_tv = (TextView) getView().findViewById(R.id.event_address_text_view);
+        event_category_tv = (TextView) getView().findViewById(R.id.event_category_text_view);
         Button cancel_button = (Button) getView().findViewById(R.id.cancel_marker_info_button);
         cancel_button.setOnClickListener(this);
 
@@ -61,15 +68,16 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
     public void setMarkerInfo(EventMarker eventMarker){
 
 
-
-
-        title_of_event_tv.setText(eventMarker.title);
-        event_description_tv.setText(eventMarker.description);
-        event_date_tv.setText(new Date(eventMarker.date).toString());
-        event_address_tv.setText(eventMarker.address);
-        event_category_tv.setText(eventMarker.category == null?"Yes":"NO");
+        //Toast.makeText(getActivity().getApplicationContext(), getView()==null?"YES":"NO", Toast.LENGTH_SHORT).show();
+        //title_of_event_tv.setText("asda ");
+        //event_description_tv.setText("asda ");
+        //event_date_tv.setText("asda ");
+        //event_address_tv.setText("asda ");
+        //event_category_tv.setText("asda ");
 
     }
+
+
 
     @Override
     public void onClick(View view) {
