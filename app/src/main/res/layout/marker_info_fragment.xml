@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF99CC">
+    android:background="#EEFF99CC">
 
     <Button
         android:id="@+id/cancel_marker_info_button"
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
-        android:layout_marginBottom="232dp"
+        android:layout_marginBottom="276dp"
         android:text="Дата"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,20 +67,21 @@
         android:id="@+id/event_address_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="232dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="168dp"
         android:text="Адрес"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/event_category_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:layout_marginEnd="124dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="96dp"
         android:text="Категория"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 

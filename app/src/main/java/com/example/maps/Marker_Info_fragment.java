@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Marker_Info_fragment extends Fragment implements View.OnClickListener{
@@ -21,12 +22,28 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
     TextView event_category_tv;
     com.google.android.material.textfield.TextInputEditText asd;
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // менеджер компоновки, который позволяет получать доступ к layout с наших ресурсов
         View view = inflater.inflate(R.layout.marker_info_fragment, container, false);
+
+        title_of_event_tv = view.findViewById(R.id.title_of_event_text_view);
+        event_description_tv = view.findViewById(R.id.event_description_tv);
+        event_date_tv = view.findViewById(R.id.event_date_text_view);
+        event_address_tv = view.findViewById(R.id.event_address_text_view);
+        event_category_tv = view.findViewById(R.id.event_category_text_view);
+        Bundle bundle = getArguments();
+        float id = Float.parseFloat((String) bundle.get("id"));
+        EventMarker eventMarker = MainActivity.mapOfMarkers.get(id);
+        title_of_event_tv.setText(eventMarker.title);
+        event_description_tv.setText(eventMarker.description);
+        event_date_tv.setText(new Date(eventMarker.date).toString());
+        event_address_tv.setText(eventMarker.address);
+        event_category_tv.setText(eventMarker.category);
 
 
 
@@ -45,11 +62,11 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
         super.onActivityCreated(savedInstanceState);
 
 
-        title_of_event_tv = (TextView) getView().findViewById(R.id.title_of_event_text_view);
-        event_description_tv = (TextView) getView().findViewById(R.id.event_description_tv);
-        event_date_tv = (TextView) getView().findViewById(R.id.event_date_text_view);
-        event_address_tv = (TextView) getView().findViewById(R.id.event_address_text_view);
-        event_category_tv = (TextView) getView().findViewById(R.id.event_category_text_view);
+
+
+
+
+
         Button cancel_button = (Button) getView().findViewById(R.id.cancel_marker_info_button);
         cancel_button.setOnClickListener(this);
 

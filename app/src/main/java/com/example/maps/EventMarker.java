@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,6 +54,18 @@ public class EventMarker {
         this.id = (float) id;
         this.date = date;
         this.address = " "+ latitude + " " + longitude;
+
+        //Geocoder geocoder = new Geocoder(context);
+        //List<Address> addresses = null;
+        //try {
+        //    addresses = geocoder.getFromLocation(latitude,longitude,1);
+        //    if(addresses.size()>0){
+        //        this.address = addresses.get(0).getAddressLine(0);
+        //    }
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //}
+
 
 
 

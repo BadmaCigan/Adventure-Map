@@ -179,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
+
+
             CameraPosition googlePlex = CameraPosition.builder()
                     .target(new LatLng(55.705199, 37.820906))
                     .zoom(18)
@@ -195,6 +197,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void openMarkerInfo(EventMarker eventMarker){
+        marker_info_fragment = new Marker_Info_fragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id",Float.toString(eventMarker.id));
+        marker_info_fragment.setArguments(bundle);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
