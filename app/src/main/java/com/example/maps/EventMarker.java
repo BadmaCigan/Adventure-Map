@@ -13,6 +13,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,6 +29,8 @@ public class EventMarker {
     public static final int CATEGORY_TALKING = 4;
 
     public static final String[] CATEGORIES = { "Другое", "Спорт","Музыка","Развлечение","Разговоры"};
+    public static Locale locale = Locale.getDefault();
+
 
     public String category;
     public LatLng position;
@@ -41,7 +45,7 @@ public class EventMarker {
 
     public EventMarker(Context context, int id,double latitude, double longitude, String title, int category){
         this(context, id,latitude,longitude,title,"Событие тест - "+ title+" по координатам : "
-                + latitude + "  " + longitude,new Date().getTime(),category);
+                + latitude + "  " + longitude, Calendar.getInstance().getTime().getTime(),category);
 
 
 
@@ -121,6 +125,12 @@ public class EventMarker {
 
 
         hashMap.put(this.id,this);
+
+    }
+
+    public String getStringDate(){
+        SimpleDateFormat pattern = new SimpleDateFormat("d MMMM y г.",locale);
+        return pattern.format(new Date(this.date));
 
     }
 

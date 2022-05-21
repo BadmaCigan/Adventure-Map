@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Button profil_button;
     public Button search_button;
     public Button new_marker_button;
+    public Button confitm_button;
     public Profil_fragment profil_fragment;
     public Search_fragment search_fragment;
     public New_Marker_fragment new_marker_fragment;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         search_button.setOnClickListener(this);
         new_marker_button = findViewById(R.id.new_marker_button);
         new_marker_button.setOnClickListener(this);
+        confitm_button = findViewById(R.id.mainComfirmbtn);
+        confitm_button.setOnClickListener(this);
         profil_fragment = new Profil_fragment();
         search_fragment = new Search_fragment();
         new_marker_fragment = new New_Marker_fragment();
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mapOfMarkers = new HashMap<>();
         fragment = new Fragment();
         createMapView();
+
 
 
 
@@ -122,6 +126,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
 
+            case R.id.mainComfirmbtn:
+                LatLng position = googleMap.getCameraPosition().target;
+                confitm_button.setVisibility(View.INVISIBLE);
+                fragmentTransaction.show(new_marker_fragment);
+                new_marker_fragment.setAdress(position);
 
         }
         fragmentTransaction.commit();
@@ -164,8 +173,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onMapReady(@NonNull GoogleMap googleMap) {
             MainActivity.this.googleMap=googleMap;
-            float a= 300f;
-            for(int i = 0;i<50;i++){
+            float a= 8f;
+            for(int i = 0;i<200;i++){
                 EventMarker marker = new EventMarker(MainActivity.this, i, 55.705199 + Math.random()/a*(Math.random()>0.5?1:-1),37.820906 + Math.random()/a*(Math.random()>0.5?1:-1.5),"Метка №" + i,i%6);
                 marker.addMarkertoMap(googleMap,mapOfMarkers);
 
@@ -177,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              //googleMap.addMarker(mark);
 
 
-            googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
 
 
@@ -215,5 +224,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static HashMap<Float,EventMarker> getMapOfMarkers(){
         return new MainActivity().mapOfMarkers;
+    }
+
+    public void selectingPosition(){
+        setAllInvissible();
+        confitm_button.setVisibility(View.VISIBLE);
     }
 }

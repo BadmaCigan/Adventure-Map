@@ -41,7 +41,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
         EventMarker eventMarker = MainActivity.mapOfMarkers.get(id);
         title_of_event_tv.setText(eventMarker.title);
         event_description_tv.setText(eventMarker.description);
-        event_date_tv.setText(new Date(eventMarker.date).toString());
+        event_date_tv.setText(eventMarker.getStringDate());
         event_address_tv.setText(eventMarker.address);
         event_category_tv.setText(eventMarker.category);
 
