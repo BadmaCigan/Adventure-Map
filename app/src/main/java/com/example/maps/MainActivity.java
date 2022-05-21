@@ -168,6 +168,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
+    public void addMarker(EventMarker marker) {
+        marker.addMarkertoMap(googleMap,mapOfMarkers);
+    }
+
     class MyMapListener implements OnMapReadyCallback {
 
         @Override

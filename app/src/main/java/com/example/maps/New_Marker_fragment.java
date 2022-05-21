@@ -1,10 +1,12 @@
 package com.example.maps;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -29,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class New_Marker_fragment extends Fragment implements View.OnClickListener {
     Spinner spinner;
@@ -39,6 +43,8 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
     TextInputEditText descriptionEdit;
     Button confirmbt;
     TextView adresstv;
+    TextView titleev;
+    LatLng position;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +64,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
         confirmbt = getView().findViewById(R.id.newMarkerConfirmButton);
         descriptionEdit = getView().findViewById(R.id.newMarkerDescriptionEditView);
         adresstv = getView().findViewById(R.id.newMarkerAdresstv);
+        titleev = getView().findViewById(R.id.newMarkerEventTitle);
         adresstv.setOnClickListener(this);
         enterDatetv.setOnClickListener(this);
         confirmbt.setOnClickListener(this);
@@ -121,7 +128,17 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                 a.show();
                 break;
             case R.id.newMarkerConfirmButton:
-                Toast.makeText(getActivity(), descriptionEdit.getText().toString(), Toast.LENGTH_SHORT).show();
+                if(verify()){
+                    EventMarker marker = new EventMarker(getActivity(), UUID.randomUUID().hashCode(),
+                            position.latitude,position.longitude,
+                            titleev.getText().toString(),
+                            descriptionEdit.getText().toString(),date.getTime(),EventMarker.getIntCategory(category));
+                    ((MainActivity)getActivity()).addMarker(marker);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    fragmentTransaction.replace(R.id.place_holder_fragment, new Fragment());
+                    setAllVissible();
+                }
+
 
                 break;
 
@@ -146,6 +163,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
 
     public void setAdress(LatLng position) {
         Geocoder geocoder = new Geocoder(getActivity(),Locale.getDefault());
+        this.position = position;
         Address address = null;
         try {
             address = geocoder.getFromLocation(position.latitude,position.longitude,1).get(0);
@@ -155,4 +173,23 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
         adresstv.setText(address.getAddressLine(0));
     }
 
+    public boolean verify(){
+        Context context = getActivity();
+        //Toast.makeText(context,, Toast.LENGTH_SHORT).show();
+        if(! Pattern.compile("\\S+( \\S+)*\\S").matcher(titleev.getText().toString()).find()){
+            Toast.makeText(context, "Введите имя события", Toast.LENGTH_SHORT).show();
+        }else if (category == null){
+            Toast.makeText(context, "Выберите категорию", Toast.LENGTH_SHORT).show();
+        }else if (date == null){
+            Toast.makeText(context, "Выберите дату", Toast.LENGTH_SHORT).show();
+        }else if(adresstv.getText().toString().equals("Введите адрес")){
+            Toast.makeText(context, "Выберите место проведения", Toast.LENGTH_SHORT).show();
+        }else if(! Pattern.compile("\\S+( \\S+)*\\S").matcher(descriptionEdit.getText().toString()).find()){
+            Toast.makeText(context, "Добавьте описание к событию", Toast.LENGTH_SHORT).show();
+        }else{
+            return true;
+        }
+        return false;
+
+    }
 }

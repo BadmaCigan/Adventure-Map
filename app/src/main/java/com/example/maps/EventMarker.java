@@ -28,7 +28,7 @@ public class EventMarker {
     public static final int CATEGORY_FUN = 3;
     public static final int CATEGORY_TALKING = 4;
 
-    public static final String[] CATEGORIES = { "Другое", "Спорт","Музыка","Развлечение","Разговоры"};
+    public static final String[] CATEGORIES = new String[]{ "Другое", "Спорт","Музыка","Развлечение","Разговоры"};
     public static Locale locale = Locale.getDefault();
 
 
@@ -58,18 +58,6 @@ public class EventMarker {
         this.id = (float) id;
         this.date = date;
         this.address = " "+ latitude + " " + longitude;
-
-        //Geocoder geocoder = new Geocoder(context);
-        //List<Address> addresses = null;
-        //try {
-        //    addresses = geocoder.getFromLocation(latitude,longitude,1);
-        //    if(addresses.size()>0){
-        //        this.address = addresses.get(0).getAddressLine(0);
-        //    }
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
-
 
 
 
@@ -132,6 +120,28 @@ public class EventMarker {
         SimpleDateFormat pattern = new SimpleDateFormat("d MMMM y г.",locale);
         return pattern.format(new Date(this.date));
 
+    }
+    public static int getIntCategory(String category){
+        for(int i = 0;i<CATEGORIES.length;i++){
+            if(CATEGORIES[i].equals(category)){
+                return i;
+            }
+        }
+
+
+        return 0;
+    }
+    public void setAdress(Context context){
+        Geocoder geocoder = new Geocoder(context);
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(this.position.latitude, this.position.longitude,1);
+            if(addresses.size()>0){
+                this.address = addresses.get(0).getAddressLine(0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
