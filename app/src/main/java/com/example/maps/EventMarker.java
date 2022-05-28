@@ -33,31 +33,38 @@ public class EventMarker {
 
 
     public String category;
-    public LatLng position;
+    public double latitude;
+    public double longitude;
     public String description;
     public String title;
     public String address;
     public float hue;
     public float id;
     public long date;
+    public int maxPeople;
+    public int peopleNow;
 
 
 
-    public EventMarker(Context context, int id,double latitude, double longitude, String title, int category){
-        this(context, id,latitude,longitude,title,"Событие тест - "+ title+" по координатам : "
-                + latitude + "  " + longitude, Calendar.getInstance().getTime().getTime(),category);
+
+    public EventMarker(int id,double latitude, double longitude, String title, int category,int maxPeople){
+        this(id,latitude,longitude,title,"Событие тест - "+ title+" по координатам : "
+                + latitude + "  " + longitude, Calendar.getInstance().getTime().getTime(),category,maxPeople);
 
 
 
     }
 
-    public EventMarker(Context context, int id, double latitude, double longitude, String title, String description, long date, int category ){
-        this.position = new LatLng(latitude, longitude);
+    public EventMarker(int id, double latitude, double longitude, String title, String description, long date, int category,int maxPeople ){
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.description = description;
         this.title = title;
         this.id = (float) id;
         this.date = date;
         this.address = " "+ latitude + " " + longitude;
+        this.maxPeople = maxPeople;
+        this.peopleNow = 0;
 
 
 
@@ -96,9 +103,25 @@ public class EventMarker {
 
     }
 
+    public String getStringDate(){
+        SimpleDateFormat pattern = new SimpleDateFormat("d MMMM y г.",locale);
+        return pattern.format(new Date(this.date));
+
+    }
+    public static int getIntCategory(String category){
+        for(int i = 0;i<CATEGORIES.length;i++){
+            if(CATEGORIES[i].equals(category)){
+                return i;
+            }
+        }
+
+
+        return 0;
+    }
+
     public MarkerOptions toMarkerOptions(){
         return new MarkerOptions()
-                .position(position)
+                .position(new LatLng(latitude,longitude))
                 .icon(BitmapDescriptorFactory.defaultMarker(this.hue))
                 .zIndex(this.id)
                 .title(this.title)
@@ -116,26 +139,12 @@ public class EventMarker {
 
     }
 
-    public String getStringDate(){
-        SimpleDateFormat pattern = new SimpleDateFormat("d MMMM y г.",locale);
-        return pattern.format(new Date(this.date));
 
-    }
-    public static int getIntCategory(String category){
-        for(int i = 0;i<CATEGORIES.length;i++){
-            if(CATEGORIES[i].equals(category)){
-                return i;
-            }
-        }
-
-
-        return 0;
-    }
     public void setAdress(Context context){
         Geocoder geocoder = new Geocoder(context);
         List<Address> addresses = null;
         try {
-            addresses = geocoder.getFromLocation(this.position.latitude, this.position.longitude,1);
+            addresses = geocoder.getFromLocation(this.latitude, this.longitude,1);
             if(addresses.size()>0){
                 this.address = addresses.get(0).getAddressLine(0);
             }
@@ -145,6 +154,20 @@ public class EventMarker {
     }
 
 
-
-
+    @Override
+    public String toString() {
+        return "EventMarker{" +
+                "category='" + category + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", description='" + description + '\'' +
+                ", title='" + title + '\'' +
+                ", address='" + address + '\'' +
+                ", hue=" + hue +
+                ", id=" + id +
+                ", date=" + date +
+                ", maxPeople=" + maxPeople +
+                ", peopleNow=" + peopleNow +
+                '}';
+    }
 }

@@ -10,6 +10,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +36,11 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class New_Marker_fragment extends Fragment implements View.OnClickListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class New_Marker_fragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     Spinner spinner;
     TextView eventCategorytv;
     TextView enterDatetv;
@@ -44,7 +50,9 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
     Button confirmbt;
     TextView adresstv;
     TextView titleev;
+    TextView numberOfPeopletv;
     LatLng position;
+    SeekBar numberOfPeopleseekbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,10 +73,13 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
         descriptionEdit = getView().findViewById(R.id.newMarkerDescriptionEditView);
         adresstv = getView().findViewById(R.id.newMarkerAdresstv);
         titleev = getView().findViewById(R.id.newMarkerEventTitle);
+        numberOfPeopletv = getView().findViewById(R.id.new_marker_number_of_people);
+        numberOfPeopleseekbar = getView().findViewById(R.id.peopleSeekBar);
         adresstv.setOnClickListener(this);
         enterDatetv.setOnClickListener(this);
         confirmbt.setOnClickListener(this);
         cancel_button.setOnClickListener(this);
+        numberOfPeopleseekbar.setOnSeekBarChangeListener(this);
 
         spinner = getView().findViewById(R.id.spinner);
         // Создаем адаптер ArrayAdapter с помощью массива строк и стандартной разметки элемета spinner
@@ -129,14 +140,33 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.newMarkerConfirmButton:
                 if(verify()){
-                    EventMarker marker = new EventMarker(getActivity(), UUID.randomUUID().hashCode(),
+                    EventMarker marker = new EventMarker(UUID.randomUUID().hashCode(),
                             position.latitude,position.longitude,
                             titleev.getText().toString(),
-                            descriptionEdit.getText().toString(),date.getTime(),EventMarker.getIntCategory(category));
+                            descriptionEdit.getText().toString(),date.getTime(),EventMarker.getIntCategory(category),numberOfPeopleseekbar.getProgress());
                     ((MainActivity)getActivity()).addMarker(marker);
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     fragmentTransaction.replace(R.id.place_holder_fragment, new Fragment());
                     setAllVissible();
+                    UserService service = ((MainActivity)getActivity()).serv;
+
+                    Call<Void> call = service.sendMsg(EventMarker.getIntCategory(marker.category),
+                            marker.latitude, marker.longitude,
+                            marker.description, marker.title, marker.address, marker.hue,
+                           marker.id, marker.date, marker.maxPeople, marker.peopleNow);
+
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            Toast.makeText(getActivity(),"Событие успешно добавлено",Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.e("dsd", t.getMessage(),new Exception() );
+                        }
+                    });
+
                 }
 
 
@@ -190,6 +220,21 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
             return true;
         }
         return false;
+
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+            New_Marker_fragment.this.numberOfPeopletv.setText(""+seekBar.getProgress()+"/"+ seekBar.getMax());
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
 }

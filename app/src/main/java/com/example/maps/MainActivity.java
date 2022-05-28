@@ -27,6 +27,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.HashMap;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,GoogleMap.OnMarkerClickListener  {
     public GoogleMap googleMap;
     public Button profil_button;
@@ -40,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static HashMap<Float,EventMarker> mapOfMarkers;
     public Animation animation;
     public Fragment fragment;
+    public Retrofit retrofit;
+    public UserService serv;
 
 
     @Override
@@ -61,7 +66,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mapOfMarkers = new HashMap<>();
         fragment = new Fragment();
         createMapView();
-
+        retrofit=new Retrofit.Builder()
+                .baseUrl("http://192.168.0.105:8080")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        serv = retrofit.create(UserService.class);
 
 
 
@@ -179,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MainActivity.this.googleMap=googleMap;
             float a= 8f;
             for(int i = 0;i<200;i++){
-                EventMarker marker = new EventMarker(MainActivity.this, i, 55.705199 + Math.random()/a*(Math.random()>0.5?1:-1),37.820906 + Math.random()/a*(Math.random()>0.5?1:-1.5),"Метка №" + i,i%6);
+                EventMarker marker = new EventMarker(i, 55.705199 + Math.random()/a*(Math.random()>0.5?1:-1),37.820906 + Math.random()/a*(Math.random()>0.5?1:-1.5),"Метка №" + i,i%6,20);
                 marker.addMarkertoMap(googleMap,mapOfMarkers);
 
             }

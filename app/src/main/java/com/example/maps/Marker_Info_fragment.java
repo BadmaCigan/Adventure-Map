@@ -20,6 +20,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
     TextView event_date_tv;
     TextView event_address_tv;
     TextView event_category_tv;
+    TextView event_count_of_people;
     com.google.android.material.textfield.TextInputEditText asd;
 
 
@@ -36,6 +37,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
         event_date_tv = view.findViewById(R.id.event_date_text_view);
         event_address_tv = view.findViewById(R.id.event_address_text_view);
         event_category_tv = view.findViewById(R.id.event_category_text_view);
+        event_count_of_people = view.findViewById(R.id.event_count_of_people_text_view);
         Bundle bundle = getArguments();
         float id = Float.parseFloat((String) bundle.get("id"));
         EventMarker eventMarker = MainActivity.mapOfMarkers.get(id);
@@ -45,6 +47,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
         eventMarker.setAdress(getActivity());
         event_address_tv.setText(eventMarker.address);
         event_category_tv.setText(eventMarker.category);
+        event_count_of_people.setText(Integer.toString(eventMarker.peopleNow) + "/"+eventMarker.maxPeople + " людей");
 
 
 
