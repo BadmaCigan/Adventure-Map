@@ -16,7 +16,7 @@ public class Upper_fragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         // менеджер компоновки, который позволяет получать доступ к layout с наших ресурсов
-        View view = inflater.inflate(R.layout.upper_fragment_layout, container, false);
+        View view = inflater.inflate(R.layout.loggest_out, container, false);
         return view;
     }
 

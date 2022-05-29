@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Button search_button;
     public Button new_marker_button;
     public Button confitm_button;
+    public Upper_fragment titleFragment;
     public Profil_fragment profil_fragment;
     public Search_fragment search_fragment;
     public New_Marker_fragment new_marker_fragment;
@@ -62,18 +63,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Retrofit vk_retrofit;
     public UserService serv;
     public VK_Service vk_service;
-    public SharedPreferences sharedPreferences;
+    public SharedPreferences userPreferences;
     public String vkAccessToken;
     public String vk_version = "5.131";
     public User user;
+    public boolean flag;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        titleFragment = new Upper_fragment();
         getSupportActionBar().hide();
-        sharedPreferences = getSharedPreferences("User", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editorSharedPreference = sharedPreferences.edit();
         setContentView(R.layout.activity_main);
         profil_button = findViewById(R.id.profil_button);
         profil_button.setOnClickListener(this);
@@ -104,13 +105,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         vk_service = vk_retrofit.create(VK_Service.class);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.place_holder_fragment, new Upper_fragment());
+        fragmentTransaction.replace(R.id.place_holder_fragment, titleFragment);
         fragmentTransaction.commit();
         setAllInvissible();
-        ArrayList<VKScope> list = new ArrayList<>();
-        list.add(VKScope.WALL);
-        list.add(VKScope.PHOTOS);
-        VK.login(this, list);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        registrtion();
+
+
+
 
 
     }
@@ -267,14 +273,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         confitm_button.setVisibility(View.VISIBLE);
     }
 
+    public void registrtion(){
+        userPreferences = getSharedPreferences("User", Context.MODE_PRIVATE);
+        if(userPreferences.contains("isRegistrated")){
+
+        }else{
+            ArrayList<VKScope> list = new ArrayList<>();
+            list.add(VKScope.WALL);
+            list.add(VKScope.PHOTOS);
+            VK.login(this, list);
+        }
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        //fragmentTransaction.replace(R.id.place_holder_fragment,new Registration_fragment());
+        //fragmentTransaction.commit();
         VKAuthCallback callback = new VKAuthCallback() {
             @Override
             public void onLogin(@NonNull VKAccessToken vkAccessToken) {
                 Toast.makeText(MainActivity.this, "Вход выполнен успешно", Toast.LENGTH_LONG).show();
                 Log.e(null, vkAccessToken.getAccessToken());
                 ((MainActivity) MainActivity.this).vkAccessToken = vkAccessToken.getAccessToken();
+
+
                 Call<JsonElement> call = vk_service.getUserInfo(MainActivity.this.vkAccessToken, vk_version);
                 call.enqueue(new Callback<JsonElement>() {
                     @Override
@@ -283,11 +307,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             JSONObject jsonObject = new JSONObject(response.body().toString());
                             JSONObject resp = jsonObject.getJSONObject("response");
                             int id = Integer.parseInt(resp.get("id").toString());
+                            checkAcc(id);
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                    
+
 
                     @Override
                     public void onFailure(Call<JsonElement> call, Throwable t) {
@@ -295,6 +322,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 });
+
 
             }
 
@@ -307,6 +335,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onActivityResult(requestCode, resultCode, data);
             Toast.makeText(MainActivity.this, "gg", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    public void checkAcc(int id){
+        Call<Boolean> call = serv.isUserRegistrated(id);
+
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                flag = response.body();
+                if(flag){
+                    getUserById(id);
+                    getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,fragment).commit();
+                    setAllVisible();
+                }else{
+                    Registration_fragment frag = new Registration_fragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id",id);
+                    frag.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,frag).commit();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+
+            }
+        });
+
     }
 
     public boolean isUserRegistrated(int id) {
@@ -330,17 +387,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    private void registrateUserById(int id) {
-
-    }
-
-    public void getUserById(int id) {
-        Call<User> call = serv.getUserById(id);
-        call.enqueue(new Callback<User>() {
+    public void getUserById(int id){
+        Call<User>userCall = serv.getUserById(id);
+        userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                Log.i("maps", response.body().toString());
-                MainActivity.this.user = response.body();
+                user = response.body();
+
             }
 
             @Override
@@ -348,5 +401,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
     }
+
+    private void registrateUserById(int id) {
+
+    }
+
+
 }

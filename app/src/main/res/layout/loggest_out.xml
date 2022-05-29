@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
 
-        tools:srcCompat="@drawable/Rectangle" />
+        tools:srcCompat="@drawable/rectangle" />
 
     <TextView
         android:id="@+id/loggest_out_text"
