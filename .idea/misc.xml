@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Leon/Documents/GitHub/Adventure-Map/app/src/main/res/drawable/ic_launcher_background.xml" value="0.37552083333333336" />
+        <entry key="..\:/Users/Leon/Documents/GitHub/Adventure-Map/app/src/main/res/font/comfortaa.xml" value="0.2296875" />
+        <entry key="..\:/Users/Leon/Documents/GitHub/Adventure-Map/app/src/main/res/layout/activity_main.xml" value="0.29528985507246375" />
+        <entry key="..\:/Users/Leon/Documents/GitHub/Adventure-Map/app/src/main/res/layout/loggest_out.xml" value="0.22" />
+        <entry key="..\:/Users/Leon/Documents/GitHub/Adventure-Map/app/src/main/res/layout/new_marker_fragment.xml" value="0.29528985507246375" />
+        <entry key="..\:/Users/Leon/Documents/GitHub/Adventure-Map/app/src/main/res/layout/upper_fragment_layout.xml" value="0.29528985507246375" />
+        <entry key="..\:/Users/Leon/Documents/GitHub/Adventure-Map/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.37552083333333336" />
         <entry key="..\:/Users/pavel/AndroidStudioProjects/Maps/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/pavel/AndroidStudioProjects/Maps/app/src/main/res/layout/new_marker_fragment.xml" value="0.33" />
         <entry key="..\:/Users/pavel/AndroidStudioProjects/Maps/app/src/main/res/layout/profil_fragment.xml" value="0.35104166666666664" />
