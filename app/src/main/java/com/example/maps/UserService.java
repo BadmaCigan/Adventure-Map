@@ -11,6 +11,12 @@ public interface UserService {
     @GET("/java/test")
     public Call<Void> test(@Query("firstName") String firstName, @Query("lastName") String lastName);
 
+    @GET("/user/isRegisrated")
+    public Call<Boolean> isUserRegistrated(@Query("id") int id);
+
+    @GET("/user/getUserById")
+    public Call<User> getUserById(@Query("id") int id);
+
     @GET("/marker/send")
     public Call<Void> sendMsg(@Query("category") int category,
                               @Query("latitude") double latitude,

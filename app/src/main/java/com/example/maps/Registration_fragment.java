@@ -3,20 +3,53 @@ package com.example.maps;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class Profil_fragment extends Fragment implements View.OnClickListener {
+import androidx.annotation.NonNull;
+
+import com.example.maps.databinding.ActivityMainBinding;
+import com.vk.api.sdk.VK;
+import com.vk.api.sdk.VKApiConfig;
+import com.vk.api.sdk.VKApiManager;
+import com.vk.api.sdk.VKMethodCall;
+import com.vk.api.sdk.auth.VKAccessToken;
+import com.vk.api.sdk.auth.VKAuthCallback;
+import com.vk.api.sdk.auth.VKScope;
+import com.vk.api.sdk.exceptions.VKApiCodes;
+import com.vk.api.sdk.requests.VKRequest;
+
+import java.util.ArrayList;
+
+public class Registration_fragment extends Fragment implements View.OnClickListener {
+    private static String CLIENT_ID = "5400655";
+    private static String CLIENT_SECRET = "wWtRxNOBD6yfzkclsaSE";
+    private static String TOKEN_URL = "https://oauth.vk.com/access_token";
+    private static String OAUTH_URL = "http://oauth.vk.com/authorize";
+    private static String RESPONSE_TYPE = "code";
+    private static String VK_API_URL = "https://api.vk.com/method/users.get";
+    private static String REDIRECT_URI = "http://localhost";
+    private static String OUR_SERVER = "http://192.168.1.35:8080/VK/";
+
+
+    ActivityMainBinding binding;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // менеджер компоновки, который позволяет получать доступ к layout с наших ресурсов
-        View view = inflater.inflate(R.layout.profil_fragment, container, false);
+        View view = inflater.inflate(R.layout.registration_fragment, container, false);
         return view;
     }
 
@@ -25,10 +58,16 @@ public class Profil_fragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         Button cancel_button = (Button) getView().findViewById(R.id.cancel_profil_button);
         cancel_button.setOnClickListener(this);
+        ArrayList<VKScope> list = new ArrayList<>();
+        list.add(VKScope.WALL);
+        list.add(VKScope.PHOTOS);
+        VK.login(getActivity(),list);
 
 
 
     }
+
+
 
     public void setAllVissible(){
         getActivity().findViewById(R.id.profil_button).setVisibility(View.VISIBLE);
