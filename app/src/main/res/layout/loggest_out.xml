@@ -13,7 +13,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/Rectangle" />
+
+        tools:srcCompat="@drawable/Rectangle" />
 
     <TextView
         android:id="@+id/loggest_out_text"

@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -66,7 +67,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button cancel_button = (Button) getView().findViewById(R.id.cancel_new_marker_button);
+        ImageButton cancel_button = (ImageButton) getView().findViewById(R.id.cancel_new_marker_button);
         eventCategorytv = getView().findViewById(R.id.newEventCategorytextView);
         enterDatetv = getView().findViewById(R.id.newEventEnterDate);
         confirmbt = getView().findViewById(R.id.newMarkerConfirmButton);

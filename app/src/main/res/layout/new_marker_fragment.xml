@@ -1,162 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_200"
+    android:background="@color/white"
+    android:padding="20dp"
     >
 
-    <Button
+
+    <ImageButton
         android:id="@+id/cancel_new_marker_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        android:text="X"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+
+        android:layout_marginTop="16dp"
+        android:background="#00ffffff"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back" />
 
     <TextView
         android:id="@+id/textView"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Добавление события"
+        android:fontFamily="@font/comfortaa"
+        android:text="Добавление \nсобытия"
+        android:textColor="#00294C"
         android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.197"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/newMarkerEventTitle"
-        android:layout_width="wrap_content"
+
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/edit_text_style"
         android:ems="10"
         android:hint="Имя события"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        style="@style/EditText"/>
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
-        android:layout_marginEnd="76dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/newEventCategorytextView"
+        app:layout_constraintStart_toEndOf="@+id/newEventCategorytextView"
+        app:layout_constraintTop_toTopOf="@+id/newEventCategorytextView" />
 
     <TextView
         android:id="@+id/newEventCategorytextView"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:text="Категория события"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/newMarkerEventTitle" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/newMarkerDescriptionEditView"
+        style="@style/EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxHeight="300dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="388dp"
+
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edit_text_style"
         android:hint="Описание события"
+        android:maxHeight="200dp"
+        android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
         android:id="@+id/textView2"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="296dp"
+        android:layout_marginTop="24dp"
         android:text="Дата"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/newEventEnterDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="296dp"
-        android:text="Введите дату"
-        android:textSize="16sp"
+        android:layout_marginStart="32dp"
+        android:background="@drawable/btn_rounded_corner"
+        android:fontFamily="@font/comfortaa"
+        android:text="Укажите дату"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
     <Button
         android:id="@+id/newMarkerConfirmButton"
+        style="@style/RoundedCornerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
-        android:text="confirm"
+        android:background="@drawable/btn_rounded_corner"
+        android:text="Confirm"
+        app:iconTint="@color/white_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textAllCaps="false"
+        />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="340dp"
-        android:text="адрес"
+        android:layout_marginTop="16dp"
+        android:text="Адрес"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        style="@style/Text"/>
 
     <TextView
         android:id="@+id/newMarkerAdresstv"
+        style=""
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="20dp"
-        android:text="Введите адрес"
+        android:layout_marginStart="24dp"
+        android:background="@drawable/btn_rounded_corner"
+        android:fontFamily="@font/comfortaa"
+        android:text="Укажите адрес"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
         app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/newEventEnterDate" />
+        app:layout_constraintTop_toTopOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.0" />
 
     <SeekBar
         android:id="@+id/peopleSeekBar"
-        android:layout_width="151dp"
+        android:layout_width="100dp"
         android:layout_height="27dp"
-        android:layout_marginStart="184dp"
-        android:layout_marginTop="256dp"
+        android:layout_marginStart="8dp"
         android:max="20"
         android:min="1"
         android:progress="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:progressTint="@color/blue"
+        android:thumbTint="@color/blue"
+        android:tickMarkTint="@color/blue"
+
+        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toTopOf="@+id/textView4" />
 
     <TextView
         android:id="@+id/textView4"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Количество участников"
+        android:text="Количество \nучастников"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newEventCategorytextView" />
 
     <TextView
         android:id="@+id/new_marker_number_of_people"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="260dp"
-        android:layout_marginEnd="44dp"
         android:text="1/20"
+        app:layout_constraintBottom_toBottomOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.271"
         app:layout_constraintStart_toEndOf="@+id/peopleSeekBar"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.35" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
