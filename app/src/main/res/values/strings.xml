@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Maps</string>
+
     <string name="advencher_m">
 Advencher\nMap
 </string>
+
+    <integer name="com_vk_sdk_AppId">8179273</integer>
+
 </resources>

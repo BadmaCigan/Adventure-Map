@@ -23,8 +23,8 @@ public class Upper_fragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button cancel_button = (Button) getView().findViewById(R.id.cancel_button);
-        cancel_button.setOnClickListener(this);
+
+
 
 
 
@@ -43,17 +43,7 @@ public class Upper_fragment extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             //при необходимости очистить поля
 
-            case R.id.cancel_button:
-                FragmentManager fragmentManager = getActivity().getFragmentManager();
-                Fragment fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.hide(fragment);
-                setAllVissible();
 
-                fragmentTransaction.commit();
-
-
-                break;
 
 
 
