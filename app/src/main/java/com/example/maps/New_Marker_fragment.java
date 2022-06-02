@@ -144,22 +144,20 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                     EventMarker marker = new EventMarker(UUID.randomUUID().hashCode(),
                             position.latitude,position.longitude,
                             titleev.getText().toString(),
-                            descriptionEdit.getText().toString(),date.getTime(),EventMarker.getIntCategory(category),numberOfPeopleseekbar.getProgress());
+                            descriptionEdit.getText().toString(),date.getTime(),EventMarker.getIntCategory(category),numberOfPeopleseekbar.getProgress(),
+                            ((MainActivity)getActivity()).user.getId());
                     ((MainActivity)getActivity()).addMarker(marker);
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     fragmentTransaction.replace(R.id.place_holder_fragment, new Fragment());
                     setAllVissible();
                     UserService service = ((MainActivity)getActivity()).serv;
 
-                    Call<Void> call = service.sendMsg(EventMarker.getIntCategory(marker.category),
-                            marker.latitude, marker.longitude,
-                            marker.description, marker.title, marker.address, marker.hue,
-                           marker.id, marker.date, marker.maxPeople, marker.peopleNow);
+                    Call<Void> call = service.sendMsg(marker);
 
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            Toast.makeText(getActivity(),"Событие успешно добавлено",Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getActivity(),"Событие успешно добавлено",Toast.LENGTH_LONG).show();
                         }
 
                         @Override

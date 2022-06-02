@@ -1,19 +1,19 @@
 package com.example.maps;
 
 public class User {
-    private String id;
-    private String nickName;
+    public int id;
+    public String nickName;
 
-    public User(String id, String nickName) {
+    public User(int id, String nickName) {
         this.id = id;
         this.nickName = nickName;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

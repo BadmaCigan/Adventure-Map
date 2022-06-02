@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.vk.api.sdk.VK;
 import com.vk.api.sdk.auth.VKAccessToken;
@@ -114,9 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
         registrtion();
-
-
-
 
 
     }
@@ -218,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MainActivity.this.googleMap = googleMap;
             float a = 8f;
             for (int i = 0; i < 200; i++) {
-                EventMarker marker = new EventMarker(i, 55.705199 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1), 37.820906 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1.5), "Метка №" + i, i % 6, 20);
+                EventMarker marker = new EventMarker(i, 55.705199 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1), 37.820906 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1.5), "Метка №" + i, i % 6, 20, 24 + i);
                 marker.addMarkertoMap(googleMap, mapOfMarkers);
 
             }
@@ -273,11 +271,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         confitm_button.setVisibility(View.VISIBLE);
     }
 
-    public void registrtion(){
-        userPreferences = getSharedPreferences("User", Context.MODE_PRIVATE);
-        if(userPreferences.contains("isRegistrated")){
+    public void registrtion() {
+        userPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
+        if (userPreferences.contains("isRegistrated")) {
 
-        }else{
+        } else {
             ArrayList<VKScope> list = new ArrayList<>();
             list.add(VKScope.WALL);
             list.add(VKScope.PHOTOS);
@@ -338,23 +336,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void checkAcc(int id){
+    public void checkAcc(int id) {
         Call<Boolean> call = serv.isUserRegistrated(id);
 
         call.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 flag = response.body();
-                if(flag){
+                if (flag) {
                     getUserById(id);
-                    getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,fragment).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment, fragment).commit();
                     setAllVisible();
-                }else{
+                } else {
                     Registration_fragment frag = new Registration_fragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("id",id);
+                    bundle.putInt("id", id);
                     frag.setArguments(bundle);
-                    getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,frag).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment, frag).commit();
                 }
             }
 
@@ -366,29 +364,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public boolean isUserRegistrated(int id) {
-        Call<Boolean> call = serv.isUserRegistrated(id);
-        call.enqueue(new Callback<Boolean>() {
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                if (response.body()) {
-                    getUserById(id);
-                } else {
-                    registrateUserById(id);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
-
-            }
-        });
-
-        return true;
-    }
-
-    public void getUserById(int id){
-        Call<User>userCall = serv.getUserById(id);
+    public void getUserById(int id) {
+        Call<User> userCall = serv.getUserById(id);
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -404,9 +382,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void registrateUserById(int id) {
+    public void registrateUserById(User user) {
+        Call<Void> call = serv.registrateUser(user);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(MainActivity.this, "Регистрация прошла успешно", Toast.LENGTH_SHORT).show();
+                getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment, new Fragment()).commit();
+            }
 
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Регистрация прервана", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
-
+    public void saveUser(User user) {
+        Gson gson = new Gson();
+        String gsonUser = gson.toJson(user, User.class);
+        SharedPreferences sharedPreferences = getSharedPreferences("user",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("user",gsonUser);
+        editor.putBoolean("isRegistrated",true);
+    }
 }

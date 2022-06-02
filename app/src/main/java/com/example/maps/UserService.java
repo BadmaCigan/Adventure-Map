@@ -14,21 +14,18 @@ public interface UserService {
     @GET("/user/isRegisrated")
     public Call<Boolean> isUserRegistrated(@Query("id") int id);
 
+    @GET("/user/registrateUser")
+    public Call<Void> registrateUser(@Query("user")User user) ;
+
+
     @GET("/user/getUserById")
     public Call<User> getUserById(@Query("id") int id);
 
+    @GET("/marker/plusPeopleOnEvent")
+    public Call<Void> plusPeopleOnEvent(@Query("eventId") float eventId,@Query("userId")int userId);
+
     @GET("/marker/send")
-    public Call<Void> sendMsg(@Query("category") int category,
-                              @Query("latitude") double latitude,
-                              @Query("longitude") double longitude,
-                              @Query("description") String description,
-                              @Query("title") String title,
-                              @Query("address") String address,
-                              @Query("hue") float hue,
-                              @Query("id") float id,
-                              @Query("date") long date,
-                              @Query("maxPeople") int maxPeople,
-                              @Query("peopleNow") int peopleNow);
+    public Call<Void> sendMsg(@Query("eventMarker") EventMarker eventMarker);
 
     //@GET("/placemark/get")
     //public Call<LinkedList<PlaceMark>> getMsg();

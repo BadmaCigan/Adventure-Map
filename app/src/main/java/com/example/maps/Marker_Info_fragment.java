@@ -70,7 +70,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
 
 
 
-
+        getView().findViewById(R.id.plus_human_button).setOnClickListener(this);
         Button cancel_button = (Button) getView().findViewById(R.id.cancel_marker_info_button);
         cancel_button.setOnClickListener(this);
 
@@ -118,6 +118,9 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
 
                 break;
 
+            case R.id.plus_human_button:
+
+                break;
 
 
         }

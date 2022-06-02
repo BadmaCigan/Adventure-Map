@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class Registration_fragment extends Fragment implements View.OnClickListe
     private static String OUR_SERVER = "http://192.168.1.35:8080/VK/";
 
 
-    ActivityMainBinding binding;
+EditText nicknemeET;
 
 
     @Override
@@ -56,12 +57,14 @@ public class Registration_fragment extends Fragment implements View.OnClickListe
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        nicknemeET = getView().findViewById(R.id.editTextTextPersonName);
+        getView().findViewById(R.id.sign_up_button).setOnClickListener(this);
         Button cancel_button = (Button) getView().findViewById(R.id.cancel_profil_button);
         cancel_button.setOnClickListener(this);
-        ArrayList<VKScope> list = new ArrayList<>();
-        list.add(VKScope.WALL);
-        list.add(VKScope.PHOTOS);
-        VK.login(getActivity(),list);
+        //ArrayList<VKScope> list = new ArrayList<>();
+        //list.add(VKScope.WALL);
+        //list.add(VKScope.PHOTOS);
+        //VK.login(getActivity(),list);
 
 
 
@@ -93,7 +96,11 @@ public class Registration_fragment extends Fragment implements View.OnClickListe
 
 
                 break;
+            case R.id.sign_up_button:
+                ((MainActivity)getActivity()).registrateUserById(new User(getArguments().getInt("id"),
+                        nicknemeET.getText().toString()));
 
+                break;
 
 
         }
