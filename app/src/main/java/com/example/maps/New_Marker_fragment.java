@@ -141,11 +141,11 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.newMarkerConfirmButton:
                 if(verify()){
-                    EventMarker marker = new EventMarker(UUID.randomUUID().hashCode(),
+                    EventMarker marker = new EventMarker(Math.abs(UUID.randomUUID().hashCode()),
                             position.latitude,position.longitude,
                             titleev.getText().toString(),
                             descriptionEdit.getText().toString(),date.getTime(),EventMarker.getIntCategory(category),numberOfPeopleseekbar.getProgress(),
-                            ((MainActivity)getActivity()).user.getId());
+                            (MainActivity.mainActivity).user.getId());
                     ((MainActivity)getActivity()).addMarker(marker);
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     fragmentTransaction.replace(R.id.place_holder_fragment, new Fragment());
@@ -157,7 +157,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            //Toast.makeText(getActivity(),"Событие успешно добавлено",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(),"Событие успешно добавлено",Toast.LENGTH_LONG).show();
                         }
 
                         @Override

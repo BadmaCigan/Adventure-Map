@@ -97,7 +97,7 @@ EditText nicknemeET;
 
                 break;
             case R.id.sign_up_button:
-                ((MainActivity)getActivity()).registrateUserById(new User(getArguments().getInt("id"),
+                ((MainActivity)getActivity()).registrateUser(new User(getArguments().getInt("id"),
                         nicknemeET.getText().toString()));
 
                 break;
