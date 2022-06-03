@@ -69,10 +69,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public String vk_version = "5.131";
     public User user;
     public boolean flag;
-
+    public static MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+          mainActivity = this;
         super.onCreate(savedInstanceState);
         titleFragment = new Upper_fragment();
         getSupportActionBar().hide();
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragment = new Fragment();
         createMapView();
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.105:8080")
+                .baseUrl("https://adventuremapserver.herokuapp.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         serv = retrofit.create(UserService.class);
@@ -295,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, "Вход выполнен успешно", Toast.LENGTH_LONG).show();
                 Log.e(null, vkAccessToken.getAccessToken());
                 ((MainActivity) MainActivity.this).vkAccessToken = vkAccessToken.getAccessToken();
-
+                Log.i("am",""+vkAccessToken.getUserId());
 
                 Call<JsonElement> call = vk_service.getUserInfo(MainActivity.this.vkAccessToken, vk_version);
                 call.enqueue(new Callback<JsonElement>() {
@@ -338,6 +339,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void checkAcc(int id) {
         Call<Boolean> call = serv.isUserRegistrated(id);
+
+
 
         call.enqueue(new Callback<Boolean>() {
             @Override
@@ -382,13 +385,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void registrateUserById(User user) {
-        Call<Void> call = serv.registrateUser(user);
+    public void registrateUser(User user) {
+        String strungUser = new Gson().toJson(user);
+        Call<Void> call = serv.registrateUser(strungUser);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Toast.makeText(MainActivity.this, "Регистрация прошла успешно", Toast.LENGTH_SHORT).show();
                 getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment, new Fragment()).commit();
+                setAllVisible();
+                MainActivity.this.user = user;
             }
 
             @Override
