@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +60,7 @@ EditText nicknemeET;
         super.onActivityCreated(savedInstanceState);
         nicknemeET = getView().findViewById(R.id.editTextTextPersonName);
         getView().findViewById(R.id.sign_up_button).setOnClickListener(this);
-        Button cancel_button = (Button) getView().findViewById(R.id.cancel_profil_button);
+        ImageButton cancel_button = (ImageButton) getView().findViewById(R.id.cancel_profil_button);
         cancel_button.setOnClickListener(this);
         //ArrayList<VKScope> list = new ArrayList<>();
         //list.add(VKScope.WALL);

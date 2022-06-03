@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class Profil_fragment extends Fragment implements View.OnClickListener {
-
+    TextView text_id;
+    TextView text_name;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -18,15 +21,19 @@ public class Profil_fragment extends Fragment implements View.OnClickListener {
         // менеджер компоновки, который позволяет получать доступ к layout с наших ресурсов
         View view = inflater.inflate(R.layout.profil_fragment, container, false);
         return view;
+
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button cancel_button = (Button) getView().findViewById(R.id.cancel_profil_button);
+        ImageButton cancel_button = (ImageButton) getView().findViewById(R.id.cancel_profil_button);
         cancel_button.setOnClickListener(this);
-
-
+        text_id =(TextView) getView().findViewById(R.id.ID_text);
+        text_name =(TextView) getView().findViewById(R.id.name_text);
+        User user = ((MainActivity)getActivity()).user;
+        text_id.setText(text_id.getText().toString() + user.getId());
+        text_name.setText(text_name.getText().toString() + user.nickName);
 
     }
 
