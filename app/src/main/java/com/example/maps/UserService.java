@@ -1,5 +1,7 @@
 package com.example.maps;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -21,6 +23,9 @@ public interface UserService {
     @GET("/user/isRegisrated")
     public Call<Boolean> isUserRegistrated(@Query("id") int id);
 
+    @GET("/user/isUserSubsribedOnEvent")
+    public Call<Boolean> isUserSubsribedOnEvent(@Query("eventId") int eventId,@Query("userId")int userId);
+
     @GET("/user/getUserById")
     public Call<User> getUserById(@Query("id") int id);
 
@@ -36,5 +41,8 @@ public interface UserService {
 
     @GET("/test")
     public Call<Void> test();
+
+    @GET("/marker/getMarkers")
+    public Call<ArrayList<EventMarker>> getMarkers();
 
 }

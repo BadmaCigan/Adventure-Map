@@ -157,7 +157,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            Toast.makeText(getActivity(),"Событие успешно добавлено",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.mainActivity,"Событие успешно добавлено",Toast.LENGTH_LONG).show();
                         }
 
                         @Override

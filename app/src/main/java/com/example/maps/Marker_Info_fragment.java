@@ -15,6 +15,10 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Marker_Info_fragment extends Fragment implements View.OnClickListener{
     TextView title_of_event_tv;
     TextView event_description_tv;
@@ -23,7 +27,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
     TextView event_category_tv;
     TextView event_count_of_people;
     com.google.android.material.textfield.TextInputEditText asd;
-
+EventMarker eventMarker;
 
 
     @Override
@@ -41,7 +45,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
         event_count_of_people = view.findViewById(R.id.event_count_of_people_text_view);
         Bundle bundle = getArguments();
         float id = Float.parseFloat((String) bundle.get("id"));
-        EventMarker eventMarker = MainActivity.mapOfMarkers.get(id);
+        eventMarker = MainActivity.mapOfMarkers.get(id);
         title_of_event_tv.setText(eventMarker.title);
         event_description_tv.setText(eventMarker.description);
         event_date_tv.setText(eventMarker.getStringDate());
@@ -120,11 +124,38 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
                 break;
 
             case R.id.plus_human_button:
+                MainActivity.mainActivity.serv.isUserSubsribedOnEvent((int)eventMarker.id,MainActivity.mainActivity.user.getId()).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        if(response.body()){
+                            Toast.makeText(getActivity(), "Вы уже зарегистрированы на это событие", Toast.LENGTH_SHORT).show();
+                        }else {
+                            registrateOnEvent();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+
+                    }
+                });
                 break;
 
 
         }
 
+    }
+    public void registrateOnEvent(){
+        MainActivity.mainActivity.serv.registrationOnEvent((int)eventMarker.id,MainActivity.mainActivity.user.getId()).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(getActivity(), "Вы успешно зарегистрированы на событие", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
     }
 }

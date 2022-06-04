@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-          mainActivity = this;
+        mainActivity = this;
         super.onCreate(savedInstanceState);
         titleFragment = new Upper_fragment();
         getSupportActionBar().hide();
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTransaction.replace(R.id.place_holder_fragment, search_fragment);
 
                 fragmentTransaction.show(search_fragment);
+                search_fragment.update();
 
                 setAllInvissible();
 
@@ -210,24 +212,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         marker.addMarkertoMap(googleMap, mapOfMarkers);
     }
 
+    public void goToMark(EventMarker eventMarker) {
+        CameraUpdate update = CameraUpdateFactory.newLatLng(new LatLng(eventMarker.latitude,eventMarker.longitude));
+getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new Fragment()).commit();
+        googleMap.animateCamera(update);
+        setAllVisible();
+    }
+
     class MyMapListener implements OnMapReadyCallback {
 
         @Override
         public void onMapReady(@NonNull GoogleMap googleMap) {
             MainActivity.this.googleMap = googleMap;
             float a = 8f;
-            for (int i = 0; i < 200; i++) {
-                EventMarker marker = new EventMarker(i, 55.705199 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1), 37.820906 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1.5), "Метка №" + i, i % 6, 20, 24 + i);
-                marker.addMarkertoMap(googleMap, mapOfMarkers);
-
-            }
+            //for (int i = 0; i < 200; i++) {
+            //    EventMarker marker = new EventMarker(i, 55.705199 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1), 37.820906 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1.5), "Метка №" + i, i % 6, 20, 24 + i);
+            //    marker.addMarkertoMap(googleMap, mapOfMarkers);
+            //}
 
             MarkerOptions mark = new MarkerOptions().position(new LatLng(55.705199, 37.820906)).rotation(15f).draggable(true).title("Туса")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).zIndex(45f);
 
             //googleMap.addMarker(mark);
-
-
+            new MapThread().start();
+            //updateMarkers();
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
 
@@ -280,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ArrayList<VKScope> list = new ArrayList<>();
             list.add(VKScope.WALL);
             list.add(VKScope.PHOTOS);
+
             VK.login(this, list);
         }
 
@@ -296,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, "Вход выполнен успешно", Toast.LENGTH_LONG).show();
                 Log.e(null, vkAccessToken.getAccessToken());
                 ((MainActivity) MainActivity.this).vkAccessToken = vkAccessToken.getAccessToken();
-                Log.i("am",""+vkAccessToken.getUserId());
+                Log.i("am", "" + vkAccessToken.getUserId());
 
                 Call<JsonElement> call = vk_service.getUserInfo(MainActivity.this.vkAccessToken, vk_version);
                 call.enqueue(new Callback<JsonElement>() {
@@ -341,7 +350,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Call<Boolean> call = serv.isUserRegistrated(id);
 
 
-
         call.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -373,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                user = response.body();
+                MainActivity.this.user = response.body();
 
             }
 
@@ -408,9 +416,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void saveUser(User user) {
         Gson gson = new Gson();
         String gsonUser = gson.toJson(user, User.class);
-        SharedPreferences sharedPreferences = getSharedPreferences("user",Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("user",gsonUser);
-        editor.putBoolean("isRegistrated",true);
+        editor.putString("user", gsonUser);
+        editor.putBoolean("isRegistrated", true);
+    }
+
+    public void updateMarkers() {
+        Call<ArrayList<EventMarker>> call = serv.getMarkers();
+        call.enqueue(new Callback<ArrayList<EventMarker>>() {
+            @Override
+            public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
+                Log.e("thread","ok");
+                ArrayList<EventMarker> markers = response.body();
+                for (EventMarker marker :
+                        markers) {
+                    if (!mapOfMarkers.containsKey(marker.id)) {
+                        addMarker(marker);
+                    }
+                    mapOfMarkers.put(marker.id, marker);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<EventMarker>> call, Throwable t) {
+                Log.e("thread","not ok");
+            }
+        });
+    }
+
+    public class  MapThread extends Thread{
+        @Override
+        public synchronized void start() {
+            super.start();
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            //Toast.makeText(MainActivity.this, "Поток", Toast.LENGTH_SHORT).show();
+            while (true) {
+                MainActivity.mainActivity.updateMarkers();
+                Log.e("Thread", "Поток update");
+                try {
+                    sleep(1000 * 30);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 }
