@@ -15,7 +15,8 @@
         android:background="#00ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/back" />
+        app:srcCompat="@drawable/back"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/textView"
@@ -29,54 +30,64 @@
 
     <TextView
         android:id="@+id/title_of_event_text_view"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:minHeight="48dp"
         android:text="Имя события"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        style="@style/Text"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/event_date_text_view"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:minHeight="48dp"
         android:text="Дата"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_count_of_people_text_view" style="@style/Text"/>
+        app:layout_constraintTop_toBottomOf="@+id/event_count_of_people_text_view" />
 
     <TextView
         android:id="@+id/event_address_text_view"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:minHeight="48dp"
         android:text="Адрес"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/event_date_text_view"
-        app:layout_constraintTop_toTopOf="@+id/event_date_text_view" style="@style/Text"/>
+        app:layout_constraintTop_toTopOf="@+id/event_date_text_view" />
 
     <TextView
         android:id="@+id/event_description_tv"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:minHeight="48dp"
         android:text="Описание"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_date_text_view" style="@style/Text"/>
+        app:layout_constraintTop_toBottomOf="@+id/event_date_text_view"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/event_category_text_view"
+        style="@style/Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:minHeight="48dp"
         android:text="Категория"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/title_of_event_text_view"
-        app:layout_constraintTop_toTopOf="@+id/title_of_event_text_view" style="@style/Text"/>
+        app:layout_constraintTop_toTopOf="@+id/title_of_event_text_view" />
 
     <TextView
         android:id="@+id/event_count_of_people_text_view"
@@ -84,6 +95,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:minHeight="48dp"
         android:padding="5dp"
         android:text="Количество людей"
         android:textSize="20sp"
