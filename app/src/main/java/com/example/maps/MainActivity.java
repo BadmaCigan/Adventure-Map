@@ -3,13 +3,17 @@ package com.example.maps;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +51,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener {
+    private static final int REQUEST_CODE_PERMISSION_FINE_LOCATION = 1234;
     public GoogleMap googleMap;
     public Fragment googleMapFragment;
     public Button profil_button;
@@ -71,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public User user;
     public boolean flag;
     public static MainActivity mainActivity;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,6 +245,23 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
 
+            int permissionStatus = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+            if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+                googleMap.setMyLocationEnabled(true);
+
+
+            } else {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_CODE_PERMISSION_FINE_LOCATION);
+            }
+
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+
+
+
             CameraPosition googlePlex = CameraPosition.builder()
                     .target(new LatLng(55.705199, 37.820906))
                     .zoom(18)
@@ -252,6 +275,22 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
         }
 
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSION_FINE_LOCATION:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    googleMap.setMyLocationEnabled(true);
+
+                } else {
+                    // permission denied
+                }
+                return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     public void openMarkerInfo(EventMarker eventMarker) {
