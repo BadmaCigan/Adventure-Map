@@ -1,120 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:padding="20dp">
-
-    <ImageButton
-        android:id="@+id/cancel_marker_info_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-
-        android:background="#00ffffff"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/back"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Информация о событии"
-        android:textColor="#00294C"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_weight="100">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-    <TextView
-        android:id="@+id/title_of_event_text_view"
-        style="@style/Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:minHeight="48dp"
-        android:text="Имя события"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="100"
+                    android:gravity="start|center"
+                    android:text="Информация о событии"
+                    android:textColor="#00294C"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <ImageButton
+                    android:id="@+id/cancel_marker_info_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
 
-    <TextView
-        android:id="@+id/event_date_text_view"
-        style="@style/Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:minHeight="48dp"
-        android:text="Дата"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_count_of_people_text_view" />
+                    android:background="#00ffffff"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/back"
+                    tools:ignore="SpeakableTextPresentCheck" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/event_address_text_view"
-        style="@style/Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:minHeight="48dp"
-        android:text="Адрес"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/event_date_text_view"
-        app:layout_constraintTop_toTopOf="@+id/event_date_text_view" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Название события"
+                    style="@style/LabelText"/>
+                <TextView
+                    android:id="@+id/title_of_event_text_view"
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-    <TextView
-        android:id="@+id/event_description_tv"
-        style="@style/Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:minHeight="48dp"
-        android:text="Описание"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_date_text_view"
-        tools:ignore="TouchTargetSizeCheck" />
+                    android:minHeight="0dp"
+                    android:padding="0dp"
+                    android:text="Имя события"
 
-    <TextView
-        android:id="@+id/event_category_text_view"
-        style="@style/Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:minHeight="48dp"
-        android:text="Категория"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/title_of_event_text_view"
-        app:layout_constraintTop_toTopOf="@+id/title_of_event_text_view" />
+                    />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/event_count_of_people_text_view"
-        style="@style/Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:minHeight="48dp"
-        android:padding="5dp"
-        android:text="Количество людей"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_of_event_text_view" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Дата события"
+                    style="@style/LabelText"/>
+                <TextView
+                    android:id="@+id/event_date_text_view"
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:minHeight="0dp"
+                    android:padding="0dp"
+                    android:text="Дата"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Адрес события"
+                    style="@style/LabelText"/>
+                <TextView
+                    android:id="@+id/event_address_text_view"
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:minHeight="0dp"
+                    android:padding="0dp"
+                    android:text="Адрес"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Количество участников"
+                    style="@style/LabelText"/>
+                <TextView
+                    android:id="@+id/event_count_of_people_text_view"
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:minHeight="0dp"
+                    android:padding="0dp"
+                    android:text="Количество людей"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Категория события"
+                    style="@style/LabelText"/>
+                <TextView
+                    android:id="@+id/event_category_text_view"
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:minHeight="0dp"
+                    android:padding="0dp"
+                    android:text="Категория"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Описание события"
+                    style="@style/LabelText"/>
+                <TextView
+                    android:id="@+id/event_description_tv"
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:minHeight="0dp"
+                    android:padding="0dp"
+                    android:text="Описание"
+
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+
+
+
+
+
+
+
+
 
     <Button
         android:id="@+id/plus_human_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:text="Я пойду"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+
         android:textAllCaps="false"
         android:background="@drawable/btn_rounded_corner"
         android:fontFamily="@font/comfortaa"/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

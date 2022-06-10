@@ -344,7 +344,7 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
             @Override
             public void onLogin(@NonNull VKAccessToken vkAccessToken) {
                 Toast.makeText(MainActivity.this, "Вход выполнен успешно", Toast.LENGTH_LONG).show();
-                Log.e(null, vkAccessToken.getAccessToken());
+                Log.e("gg", vkAccessToken.getAccessToken());
                 ((MainActivity) MainActivity.this).vkAccessToken = vkAccessToken.getAccessToken();
                 Log.i("am", "" + vkAccessToken.getUserId());
 
