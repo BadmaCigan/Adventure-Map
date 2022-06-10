@@ -241,7 +241,7 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
             MarkerOptions mark = new MarkerOptions().position(new LatLng(55.705199, 37.820906)).rotation(0f).draggable(true).title("Туса")
                     .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
 
-            googleMap.addMarker(mark);
+            //googleMap.addMarker(mark);
             new MapThread().start();
             //updateMarkers();
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
