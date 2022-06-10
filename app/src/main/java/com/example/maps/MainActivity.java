@@ -14,6 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -235,11 +237,11 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
             //    EventMarker marker = new EventMarker(i, 55.705199 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1), 37.820906 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1.5), "Метка №" + i, i % 6, 20, 24 + i);
             //    marker.addMarkertoMap(googleMap, mapOfMarkers);
             //}
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.earn);
+            MarkerOptions mark = new MarkerOptions().position(new LatLng(55.705199, 37.820906)).rotation(0f).draggable(true).title("Туса")
+                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
 
-            MarkerOptions mark = new MarkerOptions().position(new LatLng(55.705199, 37.820906)).rotation(15f).draggable(true).title("Туса")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).zIndex(45f);
-
-            //googleMap.addMarker(mark);
+            googleMap.addMarker(mark);
             new MapThread().start();
             //updateMarkers();
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);

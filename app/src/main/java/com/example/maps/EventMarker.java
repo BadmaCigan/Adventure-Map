@@ -1,6 +1,8 @@
 package com.example.maps;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 
@@ -119,9 +121,10 @@ public class EventMarker {
     }
 
     public MarkerOptions toMarkerOptions() {
+        Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.mainActivity.getResources(), R.drawable.earn);
         return new MarkerOptions()
                 .position(new LatLng(latitude, longitude))
-                .icon(BitmapDescriptorFactory.defaultMarker(this.hue))
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
                 .zIndex(this.id)
                 .title(this.title)
                 .zIndex(this.id);
