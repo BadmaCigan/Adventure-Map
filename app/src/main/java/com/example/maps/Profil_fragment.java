@@ -29,10 +29,10 @@ public class Profil_fragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         ImageButton cancel_button = (ImageButton) getView().findViewById(R.id.cancel_profil_button);
         cancel_button.setOnClickListener(this);
-        text_id =(TextView) getView().findViewById(R.id.ID_text);
+        //text_id =(TextView) getView().findViewById(R.id.ID_text);
         text_name =(TextView) getView().findViewById(R.id.name_text);
         User user = ((MainActivity)getActivity()).user;
-        text_id.setText(text_id.getText().toString() + user.getId());
+        //text_id.setText(text_id.getText().toString() + user.getId());
         text_name.setText(text_name.getText().toString() + user.nickName);
 
     }
