@@ -128,7 +128,7 @@ EventMarker eventMarker;
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         if(response.body()){
-                            Toast.makeText(getActivity(), "Вы уже зарегистрированы на это событие", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.mainActivity, "Вы уже зарегистрированы на это событие", Toast.LENGTH_SHORT).show();
                         }else {
                             registrateOnEvent();
                         }
