@@ -1,4 +1,4 @@
-package com.example.maps;
+package com.example.maps.entity;
 
 public class User {
     public int id;

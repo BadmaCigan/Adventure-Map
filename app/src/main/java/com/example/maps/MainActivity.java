@@ -23,6 +23,8 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.maps.entity.EventMarker;
+import com.example.maps.entity.User;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragment = new Fragment();
         createMapView();
         retrofit = new Retrofit.Builder()
-                .baseUrl("https://adventuremapserver.herokuapp.com")
+                .baseUrl("https://fathomless-coast-14243.herokuapp.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         serv = retrofit.create(UserService.class);

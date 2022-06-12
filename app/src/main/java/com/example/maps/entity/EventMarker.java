@@ -1,4 +1,4 @@
-package com.example.maps;
+package com.example.maps.entity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,12 +6,11 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 
-import androidx.annotation.NonNull;
-
+import com.example.maps.MainActivity;
+import com.example.maps.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
@@ -20,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 

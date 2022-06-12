@@ -16,80 +16,58 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.maps.entity.EventMarker;
+import com.example.maps.entity.Message;
+import com.example.maps.entity.User;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class Search_fragment extends Fragment implements View.OnClickListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+
+public class ChatFragment extends Fragment implements View.OnClickListener {
     RecyclerView recyclerView;
-    RecyclerEventMarkerAdapter adapter;
-    EditText search;
-    ArrayList<EventMarker> markers;
+    RecyclerMessagesAdapter adapter;
+    EditText messageEdit;
+    Message[] messages;
+    Button sendMsg;
+    User user;
+    int eventId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // менеджер компоновки, который позволяет получать доступ к layout с наших ресурсов
-        View view = inflater.inflate(R.layout.search_fragment, container, false);
+        View view = inflater.inflate(R.layout.chat_fragment, container, false);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button cancel_button = (Button) getView().findViewById(R.id.cancel_search_button);
-        cancel_button.setOnClickListener(this);
-        recyclerView = getView().findViewById(R.id.markers);
-        search = getView().findViewById(R.id.search);
-        Iterator<Map.Entry<Float, EventMarker>> iterator = MainActivity.mainActivity.mapOfMarkers.entrySet().iterator();
-        markers = new ArrayList<EventMarker>();
-        while (iterator.hasNext()) {
-            markers.add(iterator.next().getValue());
-        }
+        user = MainActivity.mainActivity.user;
+        sendMsg = getView().findViewById(R.id.sendMessage);
+        sendMsg.setOnClickListener(this);
+        recyclerView = getView().findViewById(R.id.messages);
+        messageEdit = getView().findViewById(R.id.messageEdit);
+        Bundle args = getArguments();
+        messages = new Gson().fromJson(args.getString("messages"), Message[].class);
 
-        adapter = new RecyclerEventMarkerAdapter();
-        adapter.setItems(markers);
+
+        adapter = new RecyclerMessagesAdapter();
+        adapter.setItems(messages);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-
-
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i3, int i1, int i2) {
-                String searchRequest = charSequence.toString();
-                String regExpr = ".*";
-                for (int i = 0; i < searchRequest.length(); i++) {
-                    String symb = String.valueOf(searchRequest.charAt(i));
-                    regExpr += "[" + symb.toLowerCase()+symb.toUpperCase() + "]" + ".*";
-                }
-                Pattern regPatt = Pattern.compile(regExpr);
-                List<EventMarker> list = new ArrayList<>();
-                for (EventMarker marker :
-                        markers) {
-                    if (regPatt.matcher(marker.title).find() || regPatt.matcher(marker.description).find()) {
-                        list.add(marker);
-                    }
-                }
-                adapter.setItems(list);
-                recyclerView.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
 
 
     }
@@ -119,12 +97,41 @@ public class Search_fragment extends Fragment implements View.OnClickListener {
 
                 break;
 
+            case R.id.sendMessage:
+                String text = messageEdit.getText().toString();
+                if (!text.equals("")) {
+                    eventId = getArguments().getInt("eventId");
+                    messageEdit.setText("");
+                    Message message = new Message(Math.abs(UUID.randomUUID().hashCode()), text, user.nickName, user.id, eventId, Calendar.getInstance().getTimeInMillis());
+                    MainActivity.mainActivity.serv.sendMessage(new Gson().toJson(message)).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            ChatFragment.this.update();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+
+                        }
+                    });
+                }
+                break;
 
         }
 
     }
 
     public void update() {
+        MainActivity.mainActivity.serv.getEventMessages(eventId).enqueue(new Callback<ArrayList<Message>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
+                adapter.setItems(response.body());
+            }
 
+            @Override
+            public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
+
+            }
+        });
     }
 }

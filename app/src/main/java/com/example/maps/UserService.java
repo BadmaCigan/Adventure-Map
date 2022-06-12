@@ -1,5 +1,9 @@
 package com.example.maps;
 
+import com.example.maps.entity.EventMarker;
+import com.example.maps.entity.Message;
+import com.example.maps.entity.User;
+
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -44,5 +48,11 @@ public interface UserService {
 
     @GET("/marker/getMarkers")
     public Call<ArrayList<EventMarker>> getMarkers();
+
+    @GET("/event/getEventMessages")
+    public Call<ArrayList<Message>> getEventMessages(@Query("eventId") int eventId);
+
+    @GET("/event/sendMessage")
+    public Call<Void> sendMessage(@Query("message") String message);
 
 }

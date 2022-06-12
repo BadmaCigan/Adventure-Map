@@ -4,22 +4,25 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Calendar;
-import java.util.Date;
+import com.example.maps.entity.EventMarker;
+import com.example.maps.entity.Message;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Marker_Info_fragment extends Fragment implements View.OnClickListener{
+public class Marker_Info_fragment extends Fragment implements View.OnClickListener {
     TextView title_of_event_tv;
     TextView event_description_tv;
     TextView event_date_tv;
@@ -27,7 +30,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
     TextView event_category_tv;
     TextView event_count_of_people;
     com.google.android.material.textfield.TextInputEditText asd;
-EventMarker eventMarker;
+    EventMarker eventMarker;
 
 
     @Override
@@ -52,18 +55,11 @@ EventMarker eventMarker;
         eventMarker.setAdress(getActivity());
         event_address_tv.setText(eventMarker.address);
         event_category_tv.setText(eventMarker.category);
-        event_count_of_people.setText(Integer.toString(eventMarker.peopleNow) + "/"+eventMarker.maxPeople + " людей");
-
-
-
-
-
-
+        event_count_of_people.setText(Integer.toString(eventMarker.peopleNow) + "/" + eventMarker.maxPeople + " людей");
 
 
         return view;
     }
-
 
 
     @Override
@@ -71,27 +67,22 @@ EventMarker eventMarker;
         super.onActivityCreated(savedInstanceState);
 
 
-
-
-
-
         getView().findViewById(R.id.plus_human_button).setOnClickListener(this);
         ImageButton cancel_button = (ImageButton) getView().findViewById(R.id.cancel_marker_info_button);
         cancel_button.setOnClickListener(this);
-
-
+        getView().findViewById(R.id.openChatButton).setOnClickListener(this);
 
 
     }
 
-    public void setAllVissible(){
+    public void setAllVissible() {
         getActivity().findViewById(R.id.profil_button).setVisibility(View.VISIBLE);
         getActivity().findViewById(R.id.search_button).setVisibility(View.VISIBLE);
         getActivity().findViewById(R.id.new_marker_button).setVisibility(View.VISIBLE);
 
     }
 
-    public void setMarkerInfo(EventMarker eventMarker){
+    public void setMarkerInfo(EventMarker eventMarker) {
 
 
         //Toast.makeText(getActivity().getApplicationContext(), getView()==null?"YES":"NO", Toast.LENGTH_SHORT).show();
@@ -104,11 +95,10 @@ EventMarker eventMarker;
     }
 
 
-
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
             //при необходимости очистить поля
 
             case R.id.cancel_marker_info_button:
@@ -116,7 +106,7 @@ EventMarker eventMarker;
                 Fragment fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                fragmentTransaction.replace(R.id.place_holder_fragment,new Fragment());
+                fragmentTransaction.replace(R.id.place_holder_fragment, new Fragment());
                 setAllVissible();
                 fragmentTransaction.commit();
 
@@ -124,12 +114,12 @@ EventMarker eventMarker;
                 break;
 
             case R.id.plus_human_button:
-                MainActivity.mainActivity.serv.isUserSubsribedOnEvent((int)eventMarker.id,MainActivity.mainActivity.user.getId()).enqueue(new Callback<Boolean>() {
+                MainActivity.mainActivity.serv.isUserSubsribedOnEvent((int) eventMarker.id, MainActivity.mainActivity.user.getId()).enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        if(response.body()){
+                        if (response.body()) {
                             Toast.makeText(MainActivity.mainActivity, "Вы уже зарегистрированы на это событие", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             registrateOnEvent();
                         }
                     }
@@ -141,12 +131,36 @@ EventMarker eventMarker;
                 });
                 break;
 
+            case R.id.openChatButton:
+                Toast.makeText(getActivity(), "Knopka", Toast.LENGTH_SHORT).show();
+                MainActivity.mainActivity.serv.getEventMessages((int) eventMarker.id).enqueue(new Callback<ArrayList<Message>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<Message>> call, Response<ArrayList<Message>> response) {
+                        Log.e("gg", "gg " + new Gson().toJson(response.body()));
+                        Bundle args = new Bundle();
+                        args.putString("messages",new Gson().toJson(response.body()));
+                        args.putInt("eventId",(int) eventMarker.id);
+                        ChatFragment chatFragment = new ChatFragment();
+                        chatFragment.setArguments(args);
+                        getActivity().getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,chatFragment).commit();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<Message>> call, Throwable t) {
+                        Log.e("gg",t.getMessage());
+                    }
+                });
+
+                break;
+
 
         }
 
     }
-    public void registrateOnEvent(){
-        MainActivity.mainActivity.serv.registrationOnEvent((int)eventMarker.id,MainActivity.mainActivity.user.getId()).enqueue(new Callback<Void>() {
+
+    public void registrateOnEvent() {
+        MainActivity.mainActivity.serv.registrationOnEvent((int) eventMarker.id, MainActivity.mainActivity.user.getId()).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Toast.makeText(getActivity(), "Вы успешно зарегистрированы на событие", Toast.LENGTH_SHORT).show();

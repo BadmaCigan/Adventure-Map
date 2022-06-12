@@ -3,34 +3,14 @@ package com.example.maps;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.example.maps.databinding.ActivityMainBinding;
-import com.vk.api.sdk.VK;
-import com.vk.api.sdk.VKApiConfig;
-import com.vk.api.sdk.VKApiManager;
-import com.vk.api.sdk.VKMethodCall;
-import com.vk.api.sdk.auth.VKAccessToken;
-import com.vk.api.sdk.auth.VKAuthCallback;
-import com.vk.api.sdk.auth.VKScope;
-import com.vk.api.sdk.exceptions.VKApiCodes;
-import com.vk.api.sdk.requests.VKRequest;
-
-import java.util.ArrayList;
+import com.example.maps.entity.User;
 
 public class Registration_fragment extends Fragment implements View.OnClickListener {
     private static String CLIENT_ID = "5400655";

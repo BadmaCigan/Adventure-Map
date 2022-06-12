@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.maps.entity.EventMarker;
+import com.example.maps.entity.User;
 import com.google.gson.Gson;
 
 import retrofit2.Call;

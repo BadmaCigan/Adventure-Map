@@ -1,11 +1,9 @@
 package com.example.maps;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -24,8 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.AnimatorRes;
-
+import com.example.maps.entity.EventMarker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;
 
