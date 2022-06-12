@@ -19,8 +19,7 @@ public class Profil_fragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         // менеджер компоновки, который позволяет получать доступ к layout с наших ресурсов
-        View view = inflater.inflate(R.layout.profil_fragment, container, false);
-        return view;
+        return inflater.inflate(R.layout.profil_fragment, container, false);
 
     }
 
