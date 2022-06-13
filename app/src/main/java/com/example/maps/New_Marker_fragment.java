@@ -124,9 +124,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
             case R.id.cancel_new_marker_button:
 
 
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                fragmentTransaction.replace(R.id.place_holder_fragment, new Fragment());
-                setAllVissible();
+                fragmentManager.popBackStack();
 
 
                 break;
@@ -137,29 +135,27 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                 a.show();
                 break;
             case R.id.newMarkerConfirmButton:
-                if(verify()){
+                if (verify()) {
                     EventMarker marker = new EventMarker(Math.abs(UUID.randomUUID().hashCode()),
-                            position.latitude,position.longitude,
+                            position.latitude, position.longitude,
                             titleev.getText().toString(),
-                            descriptionEdit.getText().toString(),date.getTime(),EventMarker.getIntCategory(category),numberOfPeopleseekbar.getProgress(),
+                            descriptionEdit.getText().toString(), date.getTime(), EventMarker.getIntCategory(category), numberOfPeopleseekbar.getProgress(),
                             (MainActivity.mainActivity).user.getId());
-                    ((MainActivity)getActivity()).addMarker(marker);
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                    fragmentTransaction.replace(R.id.place_holder_fragment, new Fragment());
-                    setAllVissible();
-                    UserService service = ((MainActivity)getActivity()).serv;
+                    ((MainActivity) getActivity()).addMarker(marker);
+                    fragmentManager.popBackStack();
+                    UserService service = ((MainActivity) getActivity()).serv;
 
                     Call<Void> call = service.sendMsg(marker);
 
                     call.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            Toast.makeText(MainActivity.mainActivity,"Событие успешно добавлено",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.mainActivity, "Событие успешно добавлено", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
-                            Log.e("dsd", t.getMessage(),new Exception() );
+                            Log.e("dsd", t.getMessage(), new Exception());
                         }
                     });
 
@@ -188,31 +184,31 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
     };
 
     public void setAdress(LatLng position) {
-        Geocoder geocoder = new Geocoder(getActivity(),Locale.getDefault());
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
         this.position = position;
         Address address = null;
         try {
-            address = geocoder.getFromLocation(position.latitude,position.longitude,1).get(0);
+            address = geocoder.getFromLocation(position.latitude, position.longitude, 1).get(0);
         } catch (IOException e) {
             e.printStackTrace();
         }
         adresstv.setText(address.getAddressLine(0));
     }
 
-    public boolean verify(){
+    public boolean verify() {
         Context context = getActivity();
         //Toast.makeText(context,, Toast.LENGTH_SHORT).show();
-        if(! Pattern.compile("\\S+( \\S+)*\\S").matcher(titleev.getText().toString()).find()){
+        if (!Pattern.compile("\\S+( \\S+)*\\S").matcher(titleev.getText().toString()).find()) {
             Toast.makeText(context, "Введите имя события", Toast.LENGTH_SHORT).show();
-        }else if (category == null){
+        } else if (category == null) {
             Toast.makeText(context, "Выберите категорию", Toast.LENGTH_SHORT).show();
-        }else if (date == null){
+        } else if (date == null) {
             Toast.makeText(context, "Выберите дату", Toast.LENGTH_SHORT).show();
-        }else if(adresstv.getText().toString().equals("Введите адрес")){
+        } else if (adresstv.getText().toString().equals("Введите адрес")) {
             Toast.makeText(context, "Выберите место проведения", Toast.LENGTH_SHORT).show();
-        }else if(! Pattern.compile("\\S+( \\S+)*\\S").matcher(descriptionEdit.getText().toString()).find()){
+        } else if (!Pattern.compile("\\S+( \\S+)*\\S").matcher(descriptionEdit.getText().toString()).find()) {
             Toast.makeText(context, "Добавьте описание к событию", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             return true;
         }
         return false;
@@ -221,7 +217,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-            New_Marker_fragment.this.numberOfPeopletv.setText(""+seekBar.getProgress()+"/"+ seekBar.getMax());
+        New_Marker_fragment.this.numberOfPeopletv.setText("" + seekBar.getProgress() + "/" + seekBar.getMax());
     }
 
     @Override

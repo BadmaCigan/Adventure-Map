@@ -86,7 +86,7 @@
             app:backgroundTint="@color/white_blue"
             app:fabAlignmentMode="center"
             app:menu="@menu/bottomappbar_menu"
-            app:navigationIcon="@drawable/message" />
+            />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"

@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public CoordinatorLayout coordinatorLayout;
     public BottomAppBar bottomAppBar;
     public FloatingActionButton floatingActionButton;
+    public boolean firsLaunchFlag = true;
 
 
     @Override
@@ -135,14 +136,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //setAllInvissible();
         bottomAppBar.setVisibility(View.INVISIBLE);
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         registrtion();
         floatingActionButton = findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(this);
         getFragmentManager().beginTransaction().addToBackStack("root").commit();
         getFragmentManager().beginTransaction().addToBackStack("first").commit();
+
         getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -150,7 +153,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String last = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1).getName();
                 if (last.equals("root")){
                     Toast.makeText(MainActivity.this, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show();
+                }else if(last.equals("first")){
+                    if (firsLaunchFlag){
+                        firsLaunchFlag=false;
+                        setAllInvissible();
+                    }else {
+                        setAllVisible();
+                    }
                 }
+
             }
         });
 
@@ -158,11 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void setAllInvissible() {
-        profil_button.setVisibility(View.INVISIBLE);
-        search_button.setVisibility(View.INVISIBLE);
-        new_marker_button.setVisibility(View.INVISIBLE);
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -170,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         Fragment place_holder_fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
+        fragmentTransaction.addToBackStack("from main");
 
         switch (view.getId()) {
 
@@ -210,6 +218,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTransaction.show(new_marker_fragment);
                 new_marker_fragment.setAdress(position);
 
+            case R.id.fab:
+
+                fragmentTransaction.replace(R.id.place_holder_fragment, new_marker_fragment);
+
+                fragmentTransaction.show(new_marker_fragment);
+
+                setAllInvissible();
+
+                break;
         }
         fragmentTransaction.commit();
 
@@ -227,13 +244,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction.addToBackStack("from main");
         Toast.makeText(this, "" + item.getItemId(), Toast.LENGTH_SHORT).show();
 
+
         switch (item.getItemId()) {
             case R.id.app_bar_profile:
 
                 fragmentTransaction.replace(R.id.place_holder_fragment, profil_fragment);
 
                 fragmentTransaction.show(profil_fragment);
-
+setAllInvissible();
 
                 break;
 
@@ -241,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTransaction.replace(R.id.place_holder_fragment, search_fragment);
                 fragmentTransaction.show(search_fragment);
                 search_fragment.update();
-
+setAllInvissible();
 
                 break;
 
@@ -264,11 +282,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    public void setAllInvissible() {
+        bottomAppBar.setVisibility(View.INVISIBLE);
+        floatingActionButton.hide();
+    }
 
     public void setAllVisible() {
-        profil_button.setVisibility(View.VISIBLE);
-        search_button.setVisibility(View.VISIBLE);
-        new_marker_button.setVisibility(View.VISIBLE);
+        bottomAppBar.setVisibility(View.VISIBLE);
+        floatingActionButton.show();
     }
 
 
@@ -420,8 +441,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         VKAuthCallback callback = new VKAuthCallback() {
             @Override
             public void onLogin(@NonNull VKAccessToken vkAccessToken) {
-                Toast.makeText(MainActivity.this, "Вход выполнен успешно", Toast.LENGTH_LONG).show();
-                bottomAppBar.setVisibility(View.VISIBLE);
+                setAllVisible();
                 Log.e("gg", vkAccessToken.getAccessToken());
                 ((MainActivity) MainActivity.this).vkAccessToken = vkAccessToken.getAccessToken();
                 Log.i("am", "" + vkAccessToken.getUserId());

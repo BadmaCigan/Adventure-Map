@@ -108,13 +108,7 @@ public class Search_fragment extends Fragment implements View.OnClickListener {
             //при необходимости очистить поля
 
             case R.id.cancel_search_button:
-                FragmentManager fragmentManager = getActivity().getFragmentManager();
-                Fragment fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                fragmentTransaction.replace(R.id.place_holder_fragment, new Fragment());
-                setAllVissible();
-                fragmentTransaction.commit();
+                getFragmentManager().popBackStack();
 
 
                 break;
