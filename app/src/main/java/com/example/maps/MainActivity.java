@@ -3,6 +3,8 @@ package com.example.maps;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -18,6 +20,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
@@ -35,6 +39,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.vk.api.sdk.VK;
@@ -54,7 +60,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener, Toolbar.OnMenuItemClickListener {
     private static final int REQUEST_CODE_PERMISSION_FINE_LOCATION = 1234;
     public GoogleMap googleMap;
     public Fragment googleMapFragment;
@@ -80,7 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public User user;
     public boolean flag;
     public static MainActivity mainActivity;
-    
+    public CoordinatorLayout coordinatorLayout;
+    public BottomAppBar bottomAppBar;
+    public FloatingActionButton floatingActionButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         new_marker_button = findViewById(R.id.new_marker_button);
         new_marker_button.setOnClickListener(this);
         confitm_button = findViewById(R.id.mainComfirmbtn);
+        coordinatorLayout = findViewById(R.id.coordinator);
+        bottomAppBar = findViewById(R.id.bottom_app_bar);
+        bottomAppBar.setOnMenuItemClickListener(this);
         confitm_button.setOnClickListener(this);
         googleMapFragment = getFragmentManager().findFragmentById(R.id.mapView);
         profil_fragment = new Profil_fragment();
@@ -120,13 +132,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.place_holder_fragment, titleFragment);
         fragmentTransaction.commit();
-        setAllInvissible();
+//setAllInvissible();
+        bottomAppBar.setVisibility(View.INVISIBLE);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         registrtion();
+        floatingActionButton = findViewById(R.id.fab);
+        getFragmentManager().beginTransaction().addToBackStack("root").commit();
+        getFragmentManager().beginTransaction().addToBackStack("first").commit();
+        getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                FragmentManager fragmentManager = getFragmentManager();
+                String last = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1).getName();
+                if (last.equals("root")){
+                    Toast.makeText(MainActivity.this, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
     }
@@ -149,9 +175,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.search_button:
                 fragmentTransaction.replace(R.id.place_holder_fragment, search_fragment);
-
                 fragmentTransaction.show(search_fragment);
                 search_fragment.update();
+
 
                 setAllInvissible();
 
@@ -190,6 +216,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Работа с Меню
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        Fragment place_holder_fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
+        fragmentTransaction.addToBackStack("from main");
+        Toast.makeText(this, "" + item.getItemId(), Toast.LENGTH_SHORT).show();
+
+        switch (item.getItemId()) {
+            case R.id.app_bar_profile:
+
+                fragmentTransaction.replace(R.id.place_holder_fragment, profil_fragment);
+
+                fragmentTransaction.show(profil_fragment);
+
+
+                break;
+
+            case R.id.app_bar_search:
+                fragmentTransaction.replace(R.id.place_holder_fragment, search_fragment);
+                fragmentTransaction.show(search_fragment);
+                search_fragment.update();
+
+
+                break;
+
+            default:
+                Toast.makeText(this, "hz", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        fragmentTransaction.commit();
+        return true;
+
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.bottomappbar_menu, menu);
+
+
+        return true;
+    }
+
+
     public void setAllVisible() {
         profil_button.setVisibility(View.VISIBLE);
         search_button.setVisibility(View.VISIBLE);
@@ -223,11 +298,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void goToMark(EventMarker eventMarker) {
-        CameraUpdate update = CameraUpdateFactory.newLatLng(new LatLng(eventMarker.latitude,eventMarker.longitude));
-getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new Fragment()).commit();
+        CameraUpdate update = CameraUpdateFactory.newLatLng(new LatLng(eventMarker.latitude, eventMarker.longitude));
+        getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment, new Fragment()).commit();
         googleMap.animateCamera(update);
         setAllVisible();
     }
+
 
     class MyMapListener implements OnMapReadyCallback {
 
@@ -256,14 +332,12 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
 
 
             } else {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         REQUEST_CODE_PERMISSION_FINE_LOCATION);
             }
 
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-            googleMap.getUiSettings().setZoomControlsEnabled(true);
-
-
+            //googleMap.getUiSettings().setZoomControlsEnabled(true);
 
 
             CameraPosition googlePlex = CameraPosition.builder()
@@ -308,7 +382,8 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
         Fragment place_holder_fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
         fragmentTransaction.replace(R.id.place_holder_fragment, this.marker_info_fragment);
         fragmentTransaction.commit();
-        setAllInvissible();
+        //setAllInvissible();
+        bottomAppBar.setVisibility(View.INVISIBLE);
         marker_info_fragment.setMarkerInfo(eventMarker);
         Toast.makeText(this, eventMarker.category, Toast.LENGTH_SHORT).show();
 
@@ -319,7 +394,7 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
     }
 
     public void selectingPosition() {
-        setAllInvissible();
+        //setAllInvissible();
         confitm_button.setVisibility(View.VISIBLE);
     }
 
@@ -346,6 +421,7 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
             @Override
             public void onLogin(@NonNull VKAccessToken vkAccessToken) {
                 Toast.makeText(MainActivity.this, "Вход выполнен успешно", Toast.LENGTH_LONG).show();
+                bottomAppBar.setVisibility(View.VISIBLE);
                 Log.e("gg", vkAccessToken.getAccessToken());
                 ((MainActivity) MainActivity.this).vkAccessToken = vkAccessToken.getAccessToken();
                 Log.i("am", "" + vkAccessToken.getUserId());
@@ -400,7 +476,7 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
                 if (flag) {
                     getUserById(id);
                     getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment, fragment).commit();
-                    setAllVisible();
+                    //setAllVisible();
                 } else {
                     Registration_fragment frag = new Registration_fragment();
                     Bundle bundle = new Bundle();
@@ -470,7 +546,7 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
         call.enqueue(new Callback<ArrayList<EventMarker>>() {
             @Override
             public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
-                Log.e("thread","ok");
+                Log.e("thread", "ok");
                 ArrayList<EventMarker> markers = response.body();
                 for (EventMarker marker :
                         markers) {
@@ -483,12 +559,12 @@ getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,new F
 
             @Override
             public void onFailure(Call<ArrayList<EventMarker>> call, Throwable t) {
-                Log.e("thread","not ok");
+                Log.e("thread", "not ok");
             }
         });
     }
 
-    public class  MapThread extends Thread{
+    public class MapThread extends Thread {
         @Override
         public synchronized void start() {
             super.start();
