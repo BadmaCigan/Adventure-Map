@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Search_fragment search_fragment;
     public New_Marker_fragment new_marker_fragment;
     public Marker_Info_fragment marker_info_fragment;
+    public LayersFragment layersFragment;
     public static HashMap<Float, EventMarker> mapOfMarkers;
     public Animation animation;
     public Fragment fragment;
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public BottomAppBar bottomAppBar;
     public FloatingActionButton floatingActionButton;
     public boolean firsLaunchFlag = true;
+    public ArrayList<String> tags = new ArrayList<>();
 
 
     @Override
@@ -117,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         marker_info_fragment = new Marker_Info_fragment();
         mapOfMarkers = new HashMap<>();
         fragment = new Fragment();
+        layersFragment = new LayersFragment();
         createMapView();
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://fathomless-coast-14243.herokuapp.com")
@@ -146,18 +149,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getFragmentManager().beginTransaction().addToBackStack("root").commit();
         getFragmentManager().beginTransaction().addToBackStack("first").commit();
 
+        initial();
+
         getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
                 FragmentManager fragmentManager = getFragmentManager();
-                String last = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1).getName();
-                if (last.equals("root")){
+                String last = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+                if (last.equals("root")) {
                     Toast.makeText(MainActivity.this, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show();
-                }else if(last.equals("first")){
-                    if (firsLaunchFlag){
-                        firsLaunchFlag=false;
+                } else if (last.equals("first")) {
+                    if (firsLaunchFlag) {
+                        firsLaunchFlag = false;
                         setAllInvissible();
-                    }else {
+                    } else {
                         setAllVisible();
                     }
                 }
@@ -170,6 +175,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+    public void initial(){
+        serv.getTags().enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+                tags = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {
@@ -242,7 +260,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         Fragment place_holder_fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
         fragmentTransaction.addToBackStack("from main");
-        Toast.makeText(this, "" + item.getItemId(), Toast.LENGTH_SHORT).show();
 
 
         switch (item.getItemId()) {
@@ -251,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTransaction.replace(R.id.place_holder_fragment, profil_fragment);
 
                 fragmentTransaction.show(profil_fragment);
-setAllInvissible();
+                setAllInvissible();
 
                 break;
 
@@ -259,10 +276,16 @@ setAllInvissible();
                 fragmentTransaction.replace(R.id.place_holder_fragment, search_fragment);
                 fragmentTransaction.show(search_fragment);
                 search_fragment.update();
-setAllInvissible();
+                setAllInvissible();
 
                 break;
 
+
+            case R.id.app_bar_layers:
+                fragmentTransaction.replace(R.id.place_holder_fragment, layersFragment);
+                setAllInvissible();
+
+                break;
             default:
                 Toast.makeText(this, "hz", Toast.LENGTH_SHORT).show();
                 break;

@@ -68,7 +68,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
 
 
         getView().findViewById(R.id.plus_human_button).setOnClickListener(this);
-        ImageButton cancel_button = (ImageButton) getView().findViewById(R.id.cancel_marker_info_button);
+        ImageButton cancel_button = (ImageButton) getView().findViewById(R.id.cancel_layers_button);
         cancel_button.setOnClickListener(this);
         getView().findViewById(R.id.openChatButton).setOnClickListener(this);
 
@@ -101,7 +101,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
         switch (view.getId()) {
             //при необходимости очистить поля
 
-            case R.id.cancel_marker_info_button:
+            case R.id.cancel_layers_button:
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
                 Fragment fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

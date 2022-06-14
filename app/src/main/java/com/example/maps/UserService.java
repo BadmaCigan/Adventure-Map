@@ -55,4 +55,7 @@ public interface UserService {
     @GET("/event/sendMessage")
     public Call<Void> sendMessage(@Query("message") String message);
 
+    @GET("/event/getTags")
+    public Call<ArrayList<String>> getTags();
+
 }
