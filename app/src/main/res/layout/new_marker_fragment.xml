@@ -74,19 +74,23 @@
 
                 app:boxBackgroundColor="@color/white">
 
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1" />
+
                 <com.google.android.material.textfield.TextInputEditText
 
                     android:id="@+id/newMarkerEventTitle"
                     style="@style/EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Введите название события"
 
                     android:inputType="textPersonName"
                     android:paddingLeft="5dp"
-                    android:textCursorDrawable="@drawable/color_cursor"
 
-                    />
+                    android:textCursorDrawable="@drawable/color_cursor" />
 
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -221,7 +225,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:paddingLeft="5dp"
-                    android:hint="Введите описание события"
                     android:textCursorDrawable="@drawable/color_cursor" />
 
             </com.google.android.material.textfield.TextInputLayout>
