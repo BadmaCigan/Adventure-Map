@@ -1,4 +1,4 @@
-package com.example.maps;
+package com.example.maps.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.maps.MainActivity;
+import com.example.maps.R;
 import com.example.maps.entity.User;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -80,7 +82,6 @@ public class LayersFragment extends Fragment implements View.OnClickListener, Te
 
 
                 break;
-
 
 
         }

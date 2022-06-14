@@ -29,6 +29,15 @@ import android.widget.Toast;
 
 import com.example.maps.entity.EventMarker;
 import com.example.maps.entity.User;
+import com.example.maps.fragments.LayersFragment;
+import com.example.maps.fragments.Marker_Info_fragment;
+import com.example.maps.fragments.New_Marker_fragment;
+import com.example.maps.fragments.Profil_fragment;
+import com.example.maps.fragments.Registration_fragment;
+import com.example.maps.fragments.Search_fragment;
+import com.example.maps.fragments.Upper_fragment;
+import com.example.maps.services.UserService;
+import com.example.maps.services.VK_Service;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,7 +62,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.TreeSet;
 
 import retrofit2.Call;
@@ -286,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             case R.id.app_bar_layers:
-                fragmentTransaction.replace(R.id.place_holder_fragment, layersFragment);
+                fragmentTransaction.replace(R.id.place_holder_fragment, new LayersFragment());
                 setAllInvissible();
 
                 break;

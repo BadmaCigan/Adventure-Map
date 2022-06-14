@@ -1,4 +1,4 @@
-package com.example.maps;
+package com.example.maps.services;
 
 import com.example.maps.entity.EventMarker;
 import com.example.maps.entity.Message;

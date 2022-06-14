@@ -1,8 +1,6 @@
-package com.example.maps;
+package com.example.maps.fragments;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +13,9 @@ import android.widget.EditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.maps.MainActivity;
+import com.example.maps.R;
+import com.example.maps.adapters.RecyclerEventMarkerAdapter;
 import com.example.maps.entity.EventMarker;
 
 import java.util.ArrayList;

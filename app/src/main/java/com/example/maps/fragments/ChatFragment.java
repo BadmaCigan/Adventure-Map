@@ -1,11 +1,9 @@
-package com.example.maps;
+package com.example.maps.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +13,16 @@ import android.widget.EditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.maps.entity.EventMarker;
+import com.example.maps.MainActivity;
+import com.example.maps.R;
+import com.example.maps.adapters.RecyclerMessagesAdapter;
 import com.example.maps.entity.Message;
 import com.example.maps.entity.User;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;

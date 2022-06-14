@@ -1,4 +1,4 @@
-package com.example.maps;
+package com.example.maps.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.example.maps.MainActivity;
+import com.example.maps.R;
 import com.example.maps.entity.User;
 
 public class Registration_fragment extends Fragment implements View.OnClickListener {

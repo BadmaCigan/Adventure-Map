@@ -1,4 +1,4 @@
-package com.example.maps;
+package com.example.maps.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Fragment;
@@ -22,6 +22,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.maps.MainActivity;
+import com.example.maps.R;
+import com.example.maps.services.UserService;
 import com.example.maps.entity.EventMarker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;

@@ -1,4 +1,4 @@
-package com.example.maps;
+package com.example.maps.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.maps.MainActivity;
+import com.example.maps.R;
+import com.example.maps.services.UserService;
 import com.example.maps.entity.EventMarker;
 import com.example.maps.entity.User;
 import com.google.gson.Gson;
