@@ -53,6 +53,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeSet;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -91,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public BottomAppBar bottomAppBar;
     public FloatingActionButton floatingActionButton;
     public boolean firsLaunchFlag = true;
-    public ArrayList<String> tags = new ArrayList<>();
+    public ArrayList<String> tags;
+    public TreeSet<String> filteredTags;
 
 
     @Override
@@ -180,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
                 tags = response.body();
+                filteredTags = new TreeSet<>((ArrayList<String>) tags.clone());
             }
 
             @Override
@@ -591,12 +595,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
                 Log.e("thread", "ok");
                 ArrayList<EventMarker> markers = response.body();
-                for (EventMarker marker :
-                        markers) {
-                    if (!mapOfMarkers.containsKey(marker.id)) {
-                        addMarker(marker);
+                if (markers != null) {
+                    for (EventMarker marker :
+                            markers) {
+                        if (!mapOfMarkers.containsKey(marker.id)) {
+                            addMarker(marker);
+                        }
+                        mapOfMarkers.put(marker.id, marker);
                     }
-                    mapOfMarkers.put(marker.id, marker);
                 }
             }
 

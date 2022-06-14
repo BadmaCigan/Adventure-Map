@@ -19,6 +19,10 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 public class LayersFragment extends Fragment implements View.OnClickListener, TextWatcher, CompoundButton.OnCheckedChangeListener {
@@ -26,6 +30,7 @@ public class LayersFragment extends Fragment implements View.OnClickListener, Te
     EditText tagsEdit;
     ArrayList<Chip> chips = new ArrayList<>();
     ArrayList<String> confirmTags = new ArrayList<>();
+    Set<String> checkedChips;
 
 
 
@@ -44,12 +49,15 @@ public class LayersFragment extends Fragment implements View.OnClickListener, Te
         chipGroup = getView().findViewById(R.id.tags);
         tagsEdit = getView().findViewById(R.id.autoCompleteTags);
         getView().findViewById(R.id.cancel_layers_button).setOnClickListener(this);
+        checkedChips = MainActivity.mainActivity.filteredTags;
+        chipGroup.removeAllViews();
 
         for (String tag:MainActivity.mainActivity.tags){
             Chip chip = (Chip) getActivity().getLayoutInflater().inflate(R.layout.chip_sample, chipGroup,false);
             chips.add(chip);
             chipGroup.addView(chip);
             chip.setText(tag);
+            chip.setChecked(checkedChips.contains(tag));
             chip.setOnCheckedChangeListener(this);
 
         }
@@ -96,23 +104,12 @@ public class LayersFragment extends Fragment implements View.OnClickListener, Te
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        String regex = ".*";
-        for (int i =0;i<tagsEdit.getText().toString().length();i++){
-            regex+=tagsEdit.getText().subSequence(i,i+1)+".*";
+        if (b){
+            checkedChips.add(compoundButton.getText().toString());
+        }else {
+            checkedChips.remove(compoundButton.getText().toString());
         }
-        regex+=".*";
-        Pattern pattern = Pattern.compile(regex);
-        chipGroup.removeAllViews();
-        for (Chip chip: chips){
-            if(chip.isChecked()){
-                chipGroup.addView(chip);
-            }
-        }
-        for (Chip chip: chips){
-            if(pattern.matcher(chip.getText().toString()).find() && !chip.isChecked()){
-                chipGroup.addView(chip);
-            }
-        }
+        sorting();
     }
 
     public void sorting(){
@@ -125,6 +122,7 @@ public class LayersFragment extends Fragment implements View.OnClickListener, Te
         chipGroup.removeAllViews();
         for (Chip chip: chips){
             if(chip.isChecked()){
+                chipGroup.removeView(chip);
                 chipGroup.addView(chip);
             }
         }
