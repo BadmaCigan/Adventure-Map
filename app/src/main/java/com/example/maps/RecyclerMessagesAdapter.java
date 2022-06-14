@@ -8,12 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.maps.entity.EventMarker;
 import com.example.maps.entity.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -62,7 +60,7 @@ public class RecyclerMessagesAdapter extends RecyclerView.Adapter<RecyclerMessag
     @Override
     public MessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message_layout, parent, false);
+                .inflate(R.layout.message_layout_other, parent, false);
         return new RecyclerMessagesAdapter.MessagesViewHolder(view);
     }
 

@@ -63,11 +63,15 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
+                android:clipChildren="false"
                 android:hint="Название события"
                 android:textColorHint="@color/blue"
+
+
                 app:boxBackgroundColor="@color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -76,10 +80,14 @@
                     style="@style/EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="Введите название события"
+
                     android:inputType="textPersonName"
                     android:paddingLeft="5dp"
-                    android:text="Введите название события"
-                    android:textCursorDrawable="@drawable/color_cursor" />
+                    android:textCursorDrawable="@drawable/color_cursor"
+
+                    />
+
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -200,7 +208,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
-                android:hint=" Описание события"
+                android:hint="Описание события
+"
                 android:textColorHint="@color/blue"
                 app:boxBackgroundColor="@color/white">
 
@@ -212,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:paddingLeft="5dp"
-                    android:text="Введите описание события"
+                    android:hint="Введите описание события"
                     android:textCursorDrawable="@drawable/color_cursor" />
 
             </com.google.android.material.textfield.TextInputLayout>
