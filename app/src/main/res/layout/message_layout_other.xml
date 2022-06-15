@@ -29,6 +29,9 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black_blue"
             android:text="Заголовок сообщения"
+            style="@style/Text"
+            android:paddingTop="0dp"
+            android:textSize="12dp"
            />
 
         <TextView
@@ -39,6 +42,8 @@
             android:textColor="@color/blue"
             android:text="Текст сообщенияsdfshfishfkshfkhskfhkshfkshfhsfdh"
             android:textSize="20sp"
+            style="@style/Text"
+            android:paddingTop="0dp"
           />
     </LinearLayout>
 

@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         quitDialog.show();
-    }
+    }           
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
