@@ -43,6 +43,7 @@ import retrofit2.Response;
 
 public class New_Marker_fragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     Spinner spinner;
+    Spinner colorOfMark;
     TextView eventCategorytv;
     TextView enterDatetv;
     String category;
@@ -83,6 +84,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
         numberOfPeopleseekbar.setOnSeekBarChangeListener(this);
 
         spinner = getView().findViewById(R.id.spinner);
+        colorOfMark = getView().findViewById(R.id.colorOfMark);
         // Создаем адаптер ArrayAdapter с помощью массива строк и стандартной разметки элемета spinner
         ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, EventMarker.CATEGORIES);
         // Определяем разметку для использования при выборе элемента

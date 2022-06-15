@@ -74,11 +74,6 @@
 
                 app:boxBackgroundColor="@color/white">
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_weight="1" />
 
                 <com.google.android.material.textfield.TextInputEditText
 
@@ -133,6 +128,7 @@
 
             </LinearLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -160,8 +156,9 @@
                     android:min="1"
                     android:progress="1"
                     android:progressTint="@color/blue"
-                    android:thumbTint="@color/blue"
+                    android:thumbTint="@color/black_blue"
                     android:tickMarkTint="@color/blue" />
+
 
                 <TextView
                     android:id="@+id/new_marker_number_of_people"
@@ -174,6 +171,58 @@
                     android:minHeight="48dp"
                     android:text="1/20" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:clipChildren="false"
+                        android:hint="Цвет изображения(<360)"
+                        android:textColorHint="@color/blue"
+
+
+                        app:boxBackgroundColor="@color/white"
+                        >
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+
+
+                            style="@style/EditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:inputType="textPersonName"
+                            android:paddingLeft="5dp"
+
+                            android:textColorHighlight="@color/blue"
+                            android:textColorLink="@color/white_blue"
+                            android:textCursorDrawable="@drawable/color_cursor"
+                            />
+
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                <SeekBar
+                    android:id="@+id/colorOfMark"
+                    android:layout_width="match_parent"
+                    android:layout_height="27dp"
+                    android:layout_gravity="center"
+
+                    android:max="360"
+                    android:min="0"
+                    android:progress="1"
+                    android:progressTint="@color/blue"
+                    android:thumbTint="@color/blue"
+                    android:tickMarkTint="@color/blue" />
             </LinearLayout>
 
             <LinearLayout

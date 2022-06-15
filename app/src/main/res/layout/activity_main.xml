@@ -98,7 +98,8 @@
             android:tint="#FFFFFF"
             android:visibility="visible"
             app:layout_anchor="@id/bottom_app_bar"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"
+            />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
