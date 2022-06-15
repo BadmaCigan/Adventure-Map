@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mainActivity = this;
+
         super.onCreate(savedInstanceState);
         titleFragment = new Upper_fragment();
         getSupportActionBar().hide();
@@ -135,13 +137,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mapOfMarkers = new HashMap<>();
         fragment = new Fragment();
         layersFragment = new LayersFragment();
-        createMapView();
+
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://fathomless-coast-14243.herokuapp.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         serv = retrofit.create(UserService.class);
-
+        initial();
+        createMapView();
         vk_retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.vk.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -161,10 +164,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registrtion();
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(this);
+        floatingActionButton.setColorFilter(Color.argb(255, 255, 255, 255));
         //getFragmentManager().beginTransaction().addToBackStack("root").commit();
         //getFragmentManager().beginTransaction().addToBackStack("first").commit();
 
-        initial();
+
 
 
     }
@@ -176,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
                 tags = response.body();
                 filteredTags = new TreeSet<>((ArrayList<String>) tags.clone());
+                updateMarkers();
             }
 
             @Override
@@ -333,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         quitDialog.show();
-    }           
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -400,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //        .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
 
             //googleMap.addMarker(mark);
-
+            updateMarkers();
             if (mapThread != null) {
                 mapThread.finish();
             }
