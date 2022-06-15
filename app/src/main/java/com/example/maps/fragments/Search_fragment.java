@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,7 +43,7 @@ public class Search_fragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Button cancel_button = (Button) getView().findViewById(R.id.cancel_search_button);
+        ImageButton cancel_button = (ImageButton) getView().findViewById(R.id.cancel_search_button);
         cancel_button.setOnClickListener(this);
         recyclerView = getView().findViewById(R.id.markers);
         search = getView().findViewById(R.id.search);

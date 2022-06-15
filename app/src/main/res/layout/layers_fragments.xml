@@ -42,7 +42,12 @@
         android:layout_weight="5"
         android:hint="Введите тэг"
         android:minHeight="48dp"
-        tools:ignore="TouchTargetSizeCheck" />
+        tools:ignore="TouchTargetSizeCheck"
+        android:textColorHighlight="@color/blue"
+        android:textColorLink="@color/white_blue"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:backgroundTint="@color/black_blue"
+        style="@style/EditText"/>
 
     <ScrollView
         android:layout_width="match_parent"
