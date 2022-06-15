@@ -178,38 +178,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
-                        android:clipChildren="false"
-                        android:hint="Цвет изображения(<360)"
-                        android:textColorHint="@color/blue"
-
-
-                        app:boxBackgroundColor="@color/white"
-                        >
-
-
-                        <com.google.android.material.textfield.TextInputEditText
-
-
-                            style="@style/EditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            android:inputType="textPersonName"
-                            android:paddingLeft="5dp"
-
-                            android:textColorHighlight="@color/blue"
-                            android:textColorLink="@color/white_blue"
-                            android:textCursorDrawable="@drawable/color_cursor"
-                            />
-
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Text"
+                    android:text="Цвет метки"/>
 
                 <SeekBar
                     android:id="@+id/colorOfMark"

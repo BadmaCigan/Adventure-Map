@@ -5,6 +5,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -43,7 +46,8 @@ import retrofit2.Response;
 
 public class New_Marker_fragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     Spinner spinner;
-    Spinner colorOfMark;
+
+
     TextView eventCategorytv;
     TextView enterDatetv;
     String category;
@@ -55,6 +59,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
     TextView numberOfPeopletv;
     LatLng position;
     SeekBar numberOfPeopleseekbar;
+    SeekBar seekBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +68,8 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
         // менеджер компоновки, который позволяет получать доступ к layout с наших ресурсов
         View view = inflater.inflate(R.layout.new_marker_fragment, container, false);
         return view;
+
+
     }
 
     @Override
@@ -84,7 +91,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
         numberOfPeopleseekbar.setOnSeekBarChangeListener(this);
 
         spinner = getView().findViewById(R.id.spinner);
-        colorOfMark = getView().findViewById(R.id.colorOfMark);
+
         // Создаем адаптер ArrayAdapter с помощью массива строк и стандартной разметки элемета spinner
         ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, EventMarker.CATEGORIES);
         // Определяем разметку для использования при выборе элемента
@@ -106,9 +113,13 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
             }
         };
         spinner.setOnItemSelectedListener(itemSelectedListener);
+        seekBar = (SeekBar) getView().findViewById(R.id.colorOfMark);
+        seekBar.setOnSeekBarChangeListener(this);
+
 
 
     }
+
 
     public void setAllVissible() {
         getActivity().findViewById(R.id.profil_button).setVisibility(View.VISIBLE);
@@ -222,7 +233,17 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        New_Marker_fragment.this.numberOfPeopletv.setText("" + seekBar.getProgress() + "/" + seekBar.getMax());
+        switch (seekBar.getId()){
+            case R.id.peopleSeekBar:
+                New_Marker_fragment.this.numberOfPeopletv.setText("" + seekBar.getProgress() + "/" + seekBar.getMax());
+                break;
+            case R.id.colorOfMark:
+                New_Marker_fragment.this.seekBar.setThumbTintList(ColorStateList.valueOf(Color.HSVToColor(new float[]{
+                        seekBar.getProgress(), 100, 50} )));
+                break;
+        }
+
+
     }
 
     @Override
