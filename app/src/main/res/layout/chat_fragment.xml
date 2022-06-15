@@ -16,26 +16,34 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:baselineAligned="false"
         >
 
         <EditText
             android:id="@+id/messageEdit"
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:hint="Введите сообщение"
-            style="@style/EditText"/>
+            style="@style/EditText"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:foregroundTint="@color/black_blue"
+            android:backgroundTint="@color/black_blue"
+            />
 
         <Button
             android:id="@+id/sendMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Send"
+
+            android:text="Отправить"
             android:background="@drawable/btn_rounded_corner"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            style="@style/RoundedCornerButton"
+            />
 
     </LinearLayout>
 

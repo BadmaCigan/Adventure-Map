@@ -90,6 +90,8 @@
                     android:inputType="textPersonName"
                     android:paddingLeft="5dp"
 
+                    android:textColorHighlight="@color/blue"
+                    android:textColorLink="@color/white_blue"
                     android:textCursorDrawable="@drawable/color_cursor" />
 
 
