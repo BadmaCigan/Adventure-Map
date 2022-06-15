@@ -239,6 +239,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.fab:
 
+                new_marker_fragment.clean();
+                fragmentTransaction.addToBackStack("toNew");
                 fragmentTransaction.replace(R.id.place_holder_fragment, new_marker_fragment);
 
                 fragmentTransaction.show(new_marker_fragment);
@@ -311,9 +313,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setAllVisible();
             } else if (lastCommit.equals("toChat")) {
                 fragmentManager.popBackStack();
-            } else {
+            } else if(lastCommit.equals("toNew")) {
+                new_marker_fragment.clean();
                 fragmentManager.popBackStack();
                 setAllVisible();
+            }else{
+                fragmentManager.popBackStack();
+                setAllVisible();
+
             }
         }
     }
@@ -633,14 +640,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void updateMarkers() {
         if (filteredTags != null) {
-            ArrayList<String> filters = new ArrayList<>();
-            for (String fltr : filteredTags) {
-                filters.add(fltr);
-            }
 
-            Log.e("gg", new Gson().toJson(new Filters(filters)));
 
-            serv.getEventsByFilter(new Gson().toJson(new Filters(filters))).enqueue(new Callback<ArrayList<EventMarker>>() {
+
+            serv.getMarkers().enqueue(new Callback<ArrayList<EventMarker>>() {
                 @Override
                 public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
                     mapOfMarkers = new HashMap<>();
