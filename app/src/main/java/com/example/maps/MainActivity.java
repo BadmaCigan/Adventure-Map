@@ -169,8 +169,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //getFragmentManager().beginTransaction().addToBackStack("first").commit();
 
 
-
-
     }
 
 
@@ -313,11 +311,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setAllVisible();
             } else if (lastCommit.equals("toChat")) {
                 fragmentManager.popBackStack();
-            } else if(lastCommit.equals("toNew")) {
+            } else if (lastCommit.equals("toNew")) {
                 new_marker_fragment.clean();
                 fragmentManager.popBackStack();
                 setAllVisible();
-            }else{
+            } else {
                 fragmentManager.popBackStack();
                 setAllVisible();
 
@@ -639,36 +637,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void updateMarkers() {
-        if (filteredTags != null) {
 
 
-
-            serv.getMarkers().enqueue(new Callback<ArrayList<EventMarker>>() {
-                @Override
-                public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
-                    mapOfMarkers = new HashMap<>();
-                    if (response.body() != null) {
-                        for (EventMarker marker :
-                                response.body()) {
-                            mapOfMarkers.put(marker.id, marker);
-                        }
+        serv.getMarkers().enqueue(new Callback<ArrayList<EventMarker>>() {
+            @Override
+            public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
+                mapOfMarkers = new HashMap<>();
+                if (response.body() != null) {
+                    for (EventMarker marker :
+                            response.body()) {
+                        mapOfMarkers.put(marker.id, marker);
                     }
-                    googleMap.clear();
-                    if (mapOfMarkers != null) {
-                        for (float id : mapOfMarkers.keySet()) {
-                            addMarker(mapOfMarkers.get(id));
-                        }
+                }
+                googleMap.clear();
+                if (mapOfMarkers != null) {
+                    for (float id : mapOfMarkers.keySet()) {
+                        addMarker(mapOfMarkers.get(id));
                     }
-
                 }
 
+            }
 
-                @Override
-                public void onFailure(Call<ArrayList<EventMarker>> call, Throwable t) {
 
-                }
-            });
-        }
+            @Override
+            public void onFailure(Call<ArrayList<EventMarker>> call, Throwable t) {
+
+            }
+        });
+
 
 
 
