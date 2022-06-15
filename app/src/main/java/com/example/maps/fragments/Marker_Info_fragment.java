@@ -104,13 +104,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
             //при необходимости очистить поля
 
             case R.id.cancel_layers_button:
-                FragmentManager fragmentManager = getActivity().getFragmentManager();
-                Fragment fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                fragmentTransaction.replace(R.id.place_holder_fragment, new Fragment());
-                setAllVissible();
-                fragmentTransaction.commit();
+                MainActivity.mainActivity.onBackPressed();
 
 
                 break;
@@ -144,7 +138,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
                         args.putInt("eventId",(int) eventMarker.id);
                         ChatFragment chatFragment = new ChatFragment();
                         chatFragment.setArguments(args);
-                        getActivity().getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,chatFragment).addToBackStack("fromMarkerInfo").commit();
+                        getActivity().getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,chatFragment).addToBackStack("toChat").commit();
 
                     }
 
