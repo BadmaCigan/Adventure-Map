@@ -601,6 +601,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<ArrayList<EventMarker>>() {
             @Override
             public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
+
                 Log.e("thread", "ok");
                 ArrayList<EventMarker> markers = response.body();
                 if (markers != null) {

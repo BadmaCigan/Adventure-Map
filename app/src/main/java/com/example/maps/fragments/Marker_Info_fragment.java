@@ -144,7 +144,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
                         args.putInt("eventId",(int) eventMarker.id);
                         ChatFragment chatFragment = new ChatFragment();
                         chatFragment.setArguments(args);
-                        getActivity().getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,chatFragment).commit();
+                        getActivity().getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment,chatFragment).addToBackStack("fromMarkerInfo").commit();
 
                     }
 
@@ -155,6 +155,7 @@ public class Marker_Info_fragment extends Fragment implements View.OnClickListen
                 });
 
                 break;
+                
 
 
         }

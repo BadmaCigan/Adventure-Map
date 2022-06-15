@@ -18,8 +18,16 @@ import java.util.List;
 import java.util.Locale;
 
 public class RecyclerMessagesAdapter extends RecyclerView.Adapter<RecyclerMessagesAdapter.MessagesViewHolder> {
-    List<Message> messages;
+    public static final int OWNER_MESSAGE = 2244;
+    public static final int FOREIGN_MESSAGE = 5567;
 
+    List<Message> messages;
+    int userId;
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+        notifyDataSetChanged();
+    }
 
     class MessagesViewHolder extends RecyclerView.ViewHolder {
         TextView messageTitle;
@@ -46,13 +54,13 @@ public class RecyclerMessagesAdapter extends RecyclerView.Adapter<RecyclerMessag
 
 
         messages = new ArrayList<>();
-        for (Message msg:msgs){
+        for (Message msg : msgs) {
             messages.add(msg);
         }
         notifyDataSetChanged();
     }
 
-    public void setItems(List<Message> msgs){
+    public void setItems(List<Message> msgs) {
         messages = msgs;
         notifyDataSetChanged();
     }
@@ -60,14 +68,34 @@ public class RecyclerMessagesAdapter extends RecyclerView.Adapter<RecyclerMessag
     @NonNull
     @Override
     public MessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message_layout_other, parent, false);
-        return new RecyclerMessagesAdapter.MessagesViewHolder(view);
+        View view;
+        switch (viewType) {
+            case FOREIGN_MESSAGE:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.message_layout_other, parent, false);
+                return new RecyclerMessagesAdapter.MessagesViewHolder(view);
+            case OWNER_MESSAGE:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.message_layout_your, parent, false);
+                return new RecyclerMessagesAdapter.MessagesViewHolder(view);
+
+        }
+        return null;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MessagesViewHolder holder, int position) {
         holder.bind(messages.get(position));
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (messages.get(position).clientId == userId) {
+            return OWNER_MESSAGE;
+        } else {
+            return FOREIGN_MESSAGE;
+        }
+
     }
 
     @Override
