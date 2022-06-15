@@ -31,7 +31,8 @@
 
             android:textColor="@color/blue"
             android:text="Текст сообщенияsdfshfishfkshfkhskfhkshfkshfhsfdhsdohshdfhsfhsdfhjssdfhsajkasdfh"
-            android:textSize="20sp"
+            android:textSize="20sp"     
+
           />
     </LinearLayout>
     <ImageView
