@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.maps.entity.EventMarker;
+import com.example.maps.entity.Filters;
 import com.example.maps.entity.User;
 import com.example.maps.fragments.LayersFragment;
 import com.example.maps.fragments.Marker_Info_fragment;
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean firsLaunchFlag = true;
     public ArrayList<String> tags;
     public TreeSet<String> filteredTags;
+    public MapThread mapThread;
 
 
     @Override
@@ -165,13 +167,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initial();
 
 
-
-
     }
 
 
-
-    public void initial(){
+    public void initial() {
         serv.getTags().enqueue(new Callback<ArrayList<String>>() {
             @Override
             public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
@@ -258,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Fragment place_holder_fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
 
 
-
         switch (item.getItemId()) {
             case R.id.app_bar_profile:
 
@@ -298,16 +296,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onBackPressed() {
         FragmentManager fragmentManager = getFragmentManager();
-        if(fragmentManager.getBackStackEntryCount()==0) {
+        if (fragmentManager.getBackStackEntryCount() == 0) {
             openQuitDialog();
-        }else{
-            String lastCommit = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1).getName();
-            if (lastCommit.equals("to layers")){
+        } else {
+            String lastCommit = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+            if (lastCommit.equals("toLayers")) {
                 fragmentManager.popBackStack();
+                updateMarkers();
                 setAllVisible();
-            }else if (lastCommit.equals("toChat")){
+            } else if (lastCommit.equals("toChat")) {
                 fragmentManager.popBackStack();
-            }else{
+            } else {
                 fragmentManager.popBackStack();
                 setAllVisible();
             }
@@ -358,13 +357,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void createMapView() {
 
         try {
-            if (null == googleMap) {
-                MyMapListener listener = new MyMapListener();
-                ((MapFragment) getFragmentManager().findFragmentById(
-                        R.id.mapView)).getMapAsync(listener);
+            MyMapListener listener = new MyMapListener();
+            ((MapFragment) getFragmentManager().findFragmentById(
+                    R.id.mapView)).getMapAsync(listener);
 
 
-            }
         } catch (NullPointerException exception) {
             Log.e("mapApp", exception.toString());
         }
@@ -398,12 +395,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //    EventMarker marker = new EventMarker(i, 55.705199 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1), 37.820906 + Math.random() / a * (Math.random() > 0.5 ? 1 : -1.5), "Метка №" + i, i % 6, 20, 24 + i);
             //    marker.addMarkertoMap(googleMap, mapOfMarkers);
             //}
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.earn);
-            MarkerOptions mark = new MarkerOptions().position(new LatLng(55.705199, 37.820906)).rotation(0f).draggable(true).title("Туса")
-                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+            //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.earn);
+            //MarkerOptions mark = new MarkerOptions().position(new LatLng(55.705199, 37.820906)).rotation(0f).draggable(true).title("Туса")
+            //        .icon(BitmapDescriptorFactory.fromBitmap(bitmap));
 
             //googleMap.addMarker(mark);
-            new MapThread().start();
+
+            if (mapThread != null) {
+                mapThread.finish();
+            }
+            mapThread = new MapThread();
+            mapThread.start();
             //updateMarkers();
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -548,7 +550,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     public void checkAcc(int id) {
         Call<Boolean> call = serv.isUserRegistrated(id);
 
@@ -626,7 +627,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void updateMarkers() {
-        Call<ArrayList<EventMarker>> call = serv.getMarkers();
+        if (filteredTags != null) {
+            ArrayList<String> filters = new ArrayList<>();
+            for (String fltr : filteredTags) {
+                filters.add(fltr);
+            }
+
+            Log.e("gg", new Gson().toJson(new Filters(filters)));
+
+            serv.getEventsByFilter(new Gson().toJson(new Filters(filters))).enqueue(new Callback<ArrayList<EventMarker>>() {
+                @Override
+                public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
+                    mapOfMarkers = new HashMap<>();
+                    if (response.body() != null) {
+                        for (EventMarker marker :
+                                response.body()) {
+                            mapOfMarkers.put(marker.id, marker);
+                        }
+                    }
+                    googleMap.clear();
+                    if (mapOfMarkers != null) {
+                        for (float id : mapOfMarkers.keySet()) {
+                            addMarker(mapOfMarkers.get(id));
+                        }
+                    }
+
+                }
+
+
+                @Override
+                public void onFailure(Call<ArrayList<EventMarker>> call, Throwable t) {
+
+                }
+            });
+        }
+
+
+
+        /*Call<ArrayList<EventMarker>> call = serv.getMarkers();
         call.enqueue(new Callback<ArrayList<EventMarker>>() {
             @Override
             public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
@@ -648,7 +686,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onFailure(Call<ArrayList<EventMarker>> call, Throwable t) {
                 Log.e("thread", "not ok");
             }
-        });
+        });*/
     }
 
     public class MapThread extends Thread {
@@ -657,11 +695,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.start();
         }
 
+        public volatile boolean isFinish = false;
+
         @Override
         public void run() {
             super.run();
-            //Toast.makeText(MainActivity.this, "Поток", Toast.LENGTH_SHORT).show();
-            while (true) {
+            Log.e("Thread", "start");
+            while (true && !isFinish) {
                 MainActivity.mainActivity.updateMarkers();
                 Log.e("Thread", "Поток update");
                 try {
@@ -670,7 +710,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
             }
+            Log.e("Thread", "stop");
 
+        }
+
+        public void finish()        //Инициирует завершение потока
+        {
+            isFinish = true;
         }
     }
 }

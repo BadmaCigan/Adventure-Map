@@ -1,6 +1,7 @@
 package com.example.maps.services;
 
 import com.example.maps.entity.EventMarker;
+import com.example.maps.entity.Filters;
 import com.example.maps.entity.Message;
 import com.example.maps.entity.User;
 
@@ -57,5 +58,8 @@ public interface UserService {
 
     @GET("/event/getTags")
     public Call<ArrayList<String>> getTags();
+
+    @GET("/event/getEventsByFilter")
+    public Call<ArrayList<EventMarker>> getEventsByFilter(@Query("filters") String filters);
 
 }

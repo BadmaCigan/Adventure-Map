@@ -119,10 +119,10 @@ public class EventMarker {
     }
 
     public MarkerOptions toMarkerOptions() {
-        Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.mainActivity.getResources(), R.drawable.earn);
+        //Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.mainActivity.getResources(), R.drawable.earn);
         return new MarkerOptions()
                 .position(new LatLng(latitude, longitude))
-                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                .icon(BitmapDescriptorFactory.defaultMarker(hue))
                 .zIndex(this.id)
                 .title(this.title)
                 .zIndex(this.id);

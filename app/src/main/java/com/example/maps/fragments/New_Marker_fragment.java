@@ -145,7 +145,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                             descriptionEdit.getText().toString(), date.getTime(), EventMarker.getIntCategory(category), numberOfPeopleseekbar.getProgress(),
                             (MainActivity.mainActivity).user.getId());
                     ((MainActivity) getActivity()).addMarker(marker);
-                    fragmentManager.popBackStack();
+                    MainActivity.mainActivity.onBackPressed();
                     UserService service = ((MainActivity) getActivity()).serv;
 
                     Call<Void> call = service.sendMsg(marker);
