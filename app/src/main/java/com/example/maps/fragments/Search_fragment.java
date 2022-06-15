@@ -109,7 +109,7 @@ public class Search_fragment extends Fragment implements View.OnClickListener {
             //при необходимости очистить поля
 
             case R.id.cancel_search_button:
-                getFragmentManager().popBackStack();
+                MainActivity.mainActivity.onBackPressed();
 
 
                 break;

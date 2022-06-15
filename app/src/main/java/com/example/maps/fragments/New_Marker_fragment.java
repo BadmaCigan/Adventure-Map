@@ -127,7 +127,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
             case R.id.cancel_new_marker_button:
 
 
-                fragmentManager.popBackStack();
+                MainActivity.mainActivity.onBackPressed();
 
 
                 break;

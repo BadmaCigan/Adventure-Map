@@ -60,7 +60,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
 
         adapter = new RecyclerMessagesAdapter();
+        adapter.setUserId(user.id);
         adapter.setItems(messages);
+
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);

@@ -53,7 +53,7 @@ public class Profil_fragment extends Fragment implements View.OnClickListener {
             //при необходимости очистить поля
 
             case R.id.cancel_profil_button:
-               getFragmentManager().popBackStack();
+                MainActivity.mainActivity.onBackPressed();
 
 
                 break;

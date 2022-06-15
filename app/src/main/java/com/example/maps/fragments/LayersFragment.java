@@ -78,7 +78,7 @@ public class LayersFragment extends Fragment implements View.OnClickListener, Te
             //при необходимости очистить поля
 
             case R.id.cancel_layers_button:
-                getFragmentManager().popBackStack();
+                MainActivity.mainActivity.onBackPressed();
 
 
                 break;

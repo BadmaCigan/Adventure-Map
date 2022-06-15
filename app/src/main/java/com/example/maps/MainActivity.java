@@ -9,10 +9,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -157,29 +159,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         registrtion();
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(this);
-        getFragmentManager().beginTransaction().addToBackStack("root").commit();
-        getFragmentManager().beginTransaction().addToBackStack("first").commit();
+        //getFragmentManager().beginTransaction().addToBackStack("root").commit();
+        //getFragmentManager().beginTransaction().addToBackStack("first").commit();
 
         initial();
 
-        getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                FragmentManager fragmentManager = getFragmentManager();
-                String last = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
-                if (last.equals("root")) {
-                    Toast.makeText(MainActivity.this, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show();
-                } else if (last.equals("first")) {
-                    if (firsLaunchFlag) {
-                        firsLaunchFlag = false;
-                        setAllInvissible();
-                    } else {
-                        setAllVisible();
-                    }
-                }
 
-            }
-        });
 
 
     }
@@ -271,14 +256,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         Fragment place_holder_fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
-        fragmentTransaction.addToBackStack("from main");
+
 
 
         switch (item.getItemId()) {
             case R.id.app_bar_profile:
 
                 fragmentTransaction.replace(R.id.place_holder_fragment, profil_fragment);
-
+                fragmentTransaction.addToBackStack("toProfile");
                 fragmentTransaction.show(profil_fragment);
                 setAllInvissible();
 
@@ -286,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.app_bar_search:
                 fragmentTransaction.replace(R.id.place_holder_fragment, search_fragment);
+                fragmentTransaction.addToBackStack("toSearch");
                 fragmentTransaction.show(search_fragment);
                 search_fragment.update();
                 setAllInvissible();
@@ -295,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.app_bar_layers:
                 fragmentTransaction.replace(R.id.place_holder_fragment, new LayersFragment());
+                fragmentTransaction.addToBackStack("toLayers");
                 setAllInvissible();
 
                 break;
@@ -308,6 +295,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getFragmentManager();
+        if(fragmentManager.getBackStackEntryCount()==0) {
+            openQuitDialog();
+        }else{
+            String lastCommit = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1).getName();
+            if (lastCommit.equals("to layers")){
+                fragmentManager.popBackStack();
+                setAllVisible();
+            }else if (lastCommit.equals("toChat")){
+                fragmentManager.popBackStack();
+            }else{
+                fragmentManager.popBackStack();
+                setAllVisible();
+            }
+        }
+    }
+
+    private void openQuitDialog() {
+        AlertDialog.Builder quitDialog = new AlertDialog.Builder(
+                MainActivity.this);
+        quitDialog.setTitle("Выход: Вы уверены?");
+
+        quitDialog.setPositiveButton("Таки да!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+        quitDialog.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+        quitDialog.show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -437,9 +464,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         Fragment place_holder_fragment = fragmentManager.findFragmentById(R.id.place_holder_fragment);
         fragmentTransaction.replace(R.id.place_holder_fragment, this.marker_info_fragment);
+        fragmentTransaction.addToBackStack("toMarkerInfo");
         fragmentTransaction.commit();
         //setAllInvissible();
-        bottomAppBar.setVisibility(View.INVISIBLE);
+        setAllInvissible();
         marker_info_fragment.setMarkerInfo(eventMarker);
         Toast.makeText(this, eventMarker.category, Toast.LENGTH_SHORT).show();
 
@@ -518,6 +546,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(MainActivity.this, "gg", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     public void checkAcc(int id) {
@@ -601,6 +630,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<ArrayList<EventMarker>>() {
             @Override
             public void onResponse(Call<ArrayList<EventMarker>> call, Response<ArrayList<EventMarker>> response) {
+
                 Log.e("thread", "ok");
                 ArrayList<EventMarker> markers = response.body();
                 if (markers != null) {
