@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,13 +33,19 @@ import com.example.maps.R;
 import com.example.maps.services.UserService;
 import com.example.maps.entity.EventMarker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -44,7 +53,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class New_Marker_fragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+public class New_Marker_fragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener, TextWatcher {
     Spinner spinner;
 
 
@@ -60,6 +69,11 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
     LatLng position;
     SeekBar numberOfPeopleseekbar;
     SeekBar seekBar;
+    float hue;
+    ChipGroup chipGroup;
+    EditText tagsEdit;
+    Set<String> checkedChips;
+    ArrayList<Chip> chips = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,6 +103,19 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
         confirmbt.setOnClickListener(this);
         cancel_button.setOnClickListener(this);
         numberOfPeopleseekbar.setOnSeekBarChangeListener(this);
+        chipGroup = getView().findViewById(R.id.tagsGroup);
+        tagsEdit = getView().findViewById(R.id.editTag);
+        checkedChips = new TreeSet<>();
+        for (String tag : MainActivity.mainActivity.tags) {
+            Chip chip = (Chip) getActivity().getLayoutInflater().inflate(R.layout.chip_sample, chipGroup, false);
+            chips.add(chip);
+            chipGroup.addView(chip);
+            chip.setText(tag);
+            chip.setChecked(checkedChips.contains(tag));
+            chip.setOnCheckedChangeListener(this);
+
+        }
+        tagsEdit.addTextChangedListener(this);
 
         spinner = getView().findViewById(R.id.spinner);
 
@@ -115,7 +142,6 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
         spinner.setOnItemSelectedListener(itemSelectedListener);
         seekBar = (SeekBar) getView().findViewById(R.id.colorOfMark);
         seekBar.setOnSeekBarChangeListener(this);
-
 
 
     }
@@ -152,11 +178,14 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.newMarkerConfirmButton:
                 if (verify()) {
+
+
                     EventMarker marker = new EventMarker(Math.abs(UUID.randomUUID().hashCode()),
                             position.latitude, position.longitude,
                             titleev.getText().toString(),
                             descriptionEdit.getText().toString(), date.getTime(), EventMarker.getIntCategory(category), numberOfPeopleseekbar.getProgress(),
                             (MainActivity.mainActivity).user.getId());
+                    marker.hue = hue;
                     ((MainActivity) getActivity()).addMarker(marker);
                     MainActivity.mainActivity.onBackPressed();
                     UserService service = ((MainActivity) getActivity()).serv;
@@ -220,7 +249,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
             Toast.makeText(context, "Выберите категорию", Toast.LENGTH_SHORT).show();
         } else if (date == null) {
             Toast.makeText(context, "Выберите дату", Toast.LENGTH_SHORT).show();
-        } else if (adresstv.getText().toString().equals("Введите адрес")) {
+        } else if (adresstv.getText().toString().equals("Укажите адрес")) {
             Toast.makeText(context, "Выберите место проведения", Toast.LENGTH_SHORT).show();
         } else if (!Pattern.compile("\\S+( \\S+)*\\S").matcher(descriptionEdit.getText().toString()).find()) {
             Toast.makeText(context, "Добавьте описание к событию", Toast.LENGTH_SHORT).show();
@@ -233,13 +262,14 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        switch (seekBar.getId()){
+        switch (seekBar.getId()) {
             case R.id.peopleSeekBar:
                 New_Marker_fragment.this.numberOfPeopletv.setText("" + seekBar.getProgress() + "/" + seekBar.getMax());
                 break;
             case R.id.colorOfMark:
                 New_Marker_fragment.this.seekBar.setThumbTintList(ColorStateList.valueOf(Color.HSVToColor(new float[]{
-                        seekBar.getProgress(), 100, 50} )));
+                        seekBar.getProgress(), 100, 50})));
+                hue = seekBar.getProgress();
                 break;
         }
 
@@ -253,6 +283,38 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (b) {
+            checkedChips.add(compoundButton.getText().toString());
+        } else {
+            checkedChips.remove(compoundButton.getText().toString());
+        }
+
+    }
+
+
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
+
+    public void clean(){
 
     }
 }
