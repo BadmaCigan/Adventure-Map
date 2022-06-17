@@ -187,7 +187,7 @@
                     android:layout_height="27dp"
                     android:layout_gravity="center"
 
-                    android:max="360"
+                    android:max="359"
                     android:min="0"
                     android:progress="1"
                     android:progressTint="@color/blue"
