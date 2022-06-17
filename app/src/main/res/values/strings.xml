@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Adventure Map</string>
 
-    <string name="advencher_m">Advencher\nMap</string>
+    <string name="advencher_m">Adventure\nMap</string>
     <string name="todo">TODO</string>
     <string name="write_the_tag">Введите тэг</string>
 
