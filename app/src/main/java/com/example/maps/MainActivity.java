@@ -77,10 +77,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleMap.OnMarkerClickListener, Toolbar.OnMenuItemClickListener {
     private static final int REQUEST_CODE_PERMISSION_FINE_LOCATION = 1234;
     public GoogleMap googleMap;
-    public Fragment googleMapFragment;
-    public Button profil_button;
-    public Button search_button;
-    public Button new_marker_button;
     public Button confitm_button;
     public Upper_fragment titleFragment;
     public Profil_fragment profil_fragment;
@@ -89,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public Marker_Info_fragment marker_info_fragment;
     public LayersFragment layersFragment;
     public static HashMap<Float, EventMarker> mapOfMarkers;
-    public Animation animation;
-    public Fragment fragment;
     public Retrofit retrofit;
     public Retrofit vk_retrofit;
     public UserService serv;
@@ -99,12 +93,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public String vkAccessToken;
     public String vk_version = "5.131";
     public User user;
-    public boolean flag;
     public static MainActivity mainActivity;
-    public CoordinatorLayout coordinatorLayout;
     public BottomAppBar bottomAppBar;
     public FloatingActionButton floatingActionButton;
-    public boolean firsLaunchFlag = true;
     public ArrayList<String> tags;
     public TreeSet<String> filteredTags;
     public MapThread mapThread;
@@ -112,59 +103,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mainActivity = this;
-
         super.onCreate(savedInstanceState);
-        titleFragment = new Upper_fragment();
-        getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
-        profil_button = findViewById(R.id.profil_button);
-        profil_button.setOnClickListener(this);
-        search_button = findViewById(R.id.search_button);
-        search_button.setOnClickListener(this);
-        new_marker_button = findViewById(R.id.new_marker_button);
-        new_marker_button.setOnClickListener(this);
-        confitm_button = findViewById(R.id.mainComfirmbtn);
-        coordinatorLayout = findViewById(R.id.coordinator);
-        bottomAppBar = findViewById(R.id.bottom_app_bar);
-        bottomAppBar.setOnMenuItemClickListener(this);
-        confitm_button.setOnClickListener(this);
-        googleMapFragment = getFragmentManager().findFragmentById(R.id.mapView);
-        profil_fragment = new Profil_fragment();
-        search_fragment = new Search_fragment();
-        new_marker_fragment = new New_Marker_fragment();
-        marker_info_fragment = new Marker_Info_fragment();
-        mapOfMarkers = new HashMap<>();
-        fragment = new Fragment();
-        layersFragment = new LayersFragment();
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl("https://fathomless-coast-14243.herokuapp.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        serv = retrofit.create(UserService.class);
+        mainActivity = this;
         initial();
-        createMapView();
-        vk_retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.vk.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        vk_service = vk_retrofit.create(VK_Service.class);
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.place_holder_fragment, titleFragment);
-        fragmentTransaction.commit();
-//setAllInvissible();
-        bottomAppBar.setVisibility(View.INVISIBLE);
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        registrtion();
-        floatingActionButton = findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(this);
-        floatingActionButton.setColorFilter(Color.argb(255, 255, 255, 255));
+
+
+
         //getFragmentManager().beginTransaction().addToBackStack("root").commit();
         //getFragmentManager().beginTransaction().addToBackStack("first").commit();
 
@@ -173,6 +118,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void initial() {
+        titleFragment = new Upper_fragment();
+        profil_fragment = new Profil_fragment();
+        search_fragment = new Search_fragment();
+        new_marker_fragment = new New_Marker_fragment();
+        marker_info_fragment = new Marker_Info_fragment();
+        layersFragment = new LayersFragment();
+
+        confitm_button = findViewById(R.id.mainComfirmbtn);
+        confitm_button.setOnClickListener(this);
+        bottomAppBar = findViewById(R.id.bottom_app_bar);
+        bottomAppBar.setOnMenuItemClickListener(this);
+        floatingActionButton = findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(this);
+        floatingActionButton.setColorFilter(Color.argb(255, 255, 255, 255));
+        getSupportActionBar().hide();
+        setAllInvissible();
+
+        mapOfMarkers = new HashMap<>();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl("https://fathomless-coast-14243.herokuapp.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        serv = retrofit.create(UserService.class);
+
+        vk_retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.vk.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        vk_service = vk_retrofit.create(VK_Service.class);
+
+        getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment, titleFragment).commit();
+        createMapView();
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        registrtion();
+
         serv.getTags().enqueue(new Callback<ArrayList<String>>() {
             @Override
             public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
@@ -197,37 +182,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction.addToBackStack("from main");
 
         switch (view.getId()) {
-
-            case R.id.search_button:
-                fragmentTransaction.replace(R.id.place_holder_fragment, search_fragment);
-                fragmentTransaction.show(search_fragment);
-                search_fragment.update();
-
-
-                setAllInvissible();
-
-
-                break;
-
-            case R.id.profil_button:
-                fragmentTransaction.replace(R.id.place_holder_fragment, profil_fragment);
-
-                fragmentTransaction.show(profil_fragment);
-
-                setAllInvissible();
-
-
-                break;
-
-            case R.id.new_marker_button:
-                fragmentTransaction.replace(R.id.place_holder_fragment, new_marker_fragment);
-
-                fragmentTransaction.show(new_marker_fragment);
-
-                setAllInvissible();
-
-                break;
-
 
             case R.id.mainComfirmbtn:
                 LatLng position = googleMap.getCameraPosition().target;
@@ -315,6 +269,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 new_marker_fragment.clean();
                 fragmentManager.popBackStack();
                 setAllVisible();
+            }else if(lastCommit.equals("toSelectinPosition")){
+                confitm_button.setVisibility(View.INVISIBLE);
+                fragmentManager.popBackStack();
             } else {
                 fragmentManager.popBackStack();
                 setAllVisible();
@@ -567,10 +524,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                flag = response.body();
-                if (flag) {
+                if (response.body()) {
                     getUserById(id);
-                    getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment, fragment).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.place_holder_fragment, new Fragment()).commit();
                     //setAllVisible();
                 } else {
                     Registration_fragment frag = new Registration_fragment();

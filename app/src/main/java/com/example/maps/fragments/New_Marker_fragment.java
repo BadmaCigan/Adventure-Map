@@ -210,7 +210,7 @@ public class New_Marker_fragment extends Fragment implements View.OnClickListene
                 break;
 
             case R.id.newMarkerAdresstv:
-                fragmentTransaction.hide(fragment);
+                fragmentTransaction.hide(fragment).addToBackStack("toSelectinPosition");
                 ((MainActivity) getActivity()).selectingPosition();
 
                 break;
